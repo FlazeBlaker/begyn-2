@@ -1,0 +1,393 @@
+﻿// src/pages/Dashboard.jsx
+import { useState, useEffect, useMemo } from "react";
+import { auth, db, collection, query, where, onSnapshot, doc, getDoc } from "../services/firebase";
+import { Link, Navigate } from "react-router-dom";
+
+// --- ANIMATIONS ---
+const KeyframeStyles = () => (
+    <style>
+        {`
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+      @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    `}
+    </style>
+);
+
+// --- CIRCULAR PROGRESS ---
+const CircularProgress = ({ percentage, size = 120 }) => {
+    const radius = (size - 20) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    return (
+        <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+            <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="var(--border-color)"
+                strokeWidth="10"
+            />
+            <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="url(#gradient)"
+                strokeWidth="10"
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                style={{ transition: 'stroke-dashoffset 1s ease' }}
+            />
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a855f7" />
+                    <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+            </defs>
+            <text
+                x="50%"
+                y="50%"
+                textAnchor="middle"
+                dy=".3em"
+                fontSize="28"
+                fontWeight="700"
+                fill="var(--text-primary)"
+                style={{ transform: 'rotate(90deg)', transformOrigin: 'center' }}
+            >
+                {percentage}%
+            </text>
+        </svg>
+    );
+};
+
+// --- MISSION STATUS CARD ---
+const MissionStatusCard = ({ brandCompletion }) => {
+    const cardStyle = {
+        background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1))',
+        backdropFilter: 'blur(20px)',
+        border: '2px solid rgba(168, 85, 247, 0.3)',
+        borderRadius: '20px',
+        padding: '32px',
+        animation: 'fadeIn 0.6s ease-out',
+        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
+    };
+
+    const titleStyle = {
+        fontSize: '1.5rem',
+        fontWeight: '700',
+        background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        marginBottom: '24px'
+    };
+
+    const contentStyle = {
+
+    const cardStyle = {
+        background: 'rgba(35, 35, 45, 0.5)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '16px',
+        padding: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '20px',
+        animation: 'fadeIn 0.9s ease-out',
+        transition: 'all 0.3s ease',
+        transform: hover ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hover ? `0 8px 30px ${color}40` : '0 4px 15px rgba(0, 0, 0, 0.2)'
+    };
+
+    const iconBoxStyle = {
+        flexShrink: 0,
+        width: '56px',
+        height: '56px',
+        borderRadius: '12px',
+        background: `${color}30`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.8rem'
+    };
+
+    const contentStyle = { flexGrow: 1 };
+    const valueStyle = { fontSize: '2rem', fontWeight: '800', color: '#ffffff', marginBottom: '4px' };
+    const labelStyle = { fontSize: '0.9rem', color: '#a0a0b0', fontWeight: '500' };
+
+    return (
+        <div
+            style={cardStyle}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+        >
+            <div style={iconBoxStyle}>{icon}</div>
+            <div style={contentStyle}>
+                <div style={valueStyle}>{value}</div>
+                <div style={labelStyle}>{label}</div>
+            </div>
+        </div>
+    );
+};
+
+// --- MISSING FIELDS ALERT ---
+const MissingFieldsAlert = ({ missingFields }) => {
+    if (missingFields.length === 0) return null;
+
+    const alertStyle = {
+        background: 'rgba(251, 191, 36, 0.1)',
+        border: '1px solid rgba(251, 191, 36, 0.3)',
+        borderRadius: '16px',
+        padding: '20px 24px',
+        marginBottom: '24px',
+        animation: 'fadeIn 0.5s ease-out'
+    };
+
+    const titleStyle = {
+        fontSize: '1.1rem',
+        fontWeight: '700',
+        color: '#fbbf24',
+        marginBottom: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+    };
+
+    const listStyle = {
+        color: '#fde68a',
+        fontSize: '0.95rem',
+        marginLeft: '24px',
+        marginBottom: '16px'
+    };
+
+    const buttonStyle = {
+        padding: '10px 20px',
+        background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+        border: 'none',
+        borderRadius: '8px',
+        color: '#000',
+        fontWeight: '700',
+        cursor: 'pointer',
+        textDecoration: 'none',
+        display: 'inline-block',
+        transition: 'all 0.3s ease'
+    };
+
+    return (
+        <div style={alertStyle}>
+            <div style={titleStyle}>
+                <span>⚠️</span> Complete Your Brand Profile
+            </div>
+            <ul style={listStyle}>
+                {missingFields.map((field, i) => (
+                    <li key={i}>{field}</li>
+                ))}
+            </ul>
+            <Link to="/brand-setup" style={buttonStyle}>
+                Complete Setup →
+            </Link>
+        </div>
+    );
+};
+
+// --- MAIN DASHBOARD ---
+export default function Dashboard() {
+    const [stats, setStats] = useState({
+        posts: 0, ideas: 0, captions: 0, tweets: 0, scripts: 0, chats: 0
+    });
+    const [brandData, setBrandData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [onboarded, setOnboarded] = useState(true);
+    const uid = auth.currentUser?.uid;
+
+    // Calculate brand completion - FIX: Handle non-string values
+    const brandCompletion = useMemo(() => {
+        if (!brandData) return 0;
+        const fields = ['brandName', 'industry', 'tone', 'audience', 'colors'];
+        const filledFields = fields.filter(field => {
+            const value = brandData[field];
+            if (!value) return false;
+            // Handle both strings and arrays
+            if (typeof value === 'string') return value.trim().length > 0;
+            if (Array.isArray(value)) return value.length > 0;
+            return true; // Other types (objects, etc.) count as filled
+        });
+        return Math.round((filledFields.length / fields.length) * 100);
+    }, [brandData]);
+
+    // Get missing fields - FIX: Handle non-string values
+    const missingFields = useMemo(() => {
+        if (!brandData) return [];
+        const fieldLabels = {
+            brandName: 'Brand Name',
+            industry: 'Industry & Niche',
+            tone: 'Tone of Voice',
+            audience: 'Target Audience',
+            colors: 'Brand Colors'
+        };
+        const missing = [];
+        Object.keys(fieldLabels).forEach(field => {
+            const value = brandData[field];
+            if (!value) {
+                missing.push(fieldLabels[field]);
+            } else if (typeof value === 'string' && value.trim().length === 0) {
+                missing.push(fieldLabels[field]);
+            } else if (Array.isArray(value) && value.length === 0) {
+                missing.push(fieldLabels[field]);
+            }
+        });
+        return missing;
+    }, [brandData]);
+
+    useEffect(() => {
+        if (!uid) {
+            setLoading(false);
+            return;
+        }
+
+        // Fetch brand data and onboarding status
+        const fetchBrandData = async () => {
+            const docRef = doc(db, "brands", uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                setBrandData(data);
+                setOnboarded(data.onboarded || false);
+            }
+        };
+        fetchBrandData();
+
+        let historyCount = {};
+        let chatCount = 0;
+
+        // Query 1: History Stats
+        const historyRef = collection(db, "history");
+        const historyQuery = query(
+            historyRef,
+            where("userId", "==", uid),
+            where("type", "in", [
+                "generate_post",
+                "generate_idea",
+                "generate_caption",
+                "generate_tweet",
+                "generate_video_script"
+            ])
+        );
+
+        const unsubscribeHistory = onSnapshot(historyQuery, (snapshot) => {
+            const counts = { posts: 0, ideas: 0, captions: 0, tweets: 0, scripts: 0 };
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                if (item.type === "generate_post") counts.posts += 1;
+                if (item.type === "generate_idea") counts.ideas += 1;
+                if (item.type === "generate_caption") counts.captions += 1;
+                if (item.type === "generate_tweet") counts.tweets += 1;
+                if (item.type === "generate_video_script") counts.scripts += 1;
+            });
+
+            historyCount = counts;
+            setStats(prevStats => ({ ...prevStats, ...historyCount, chats: chatCount }));
+            setLoading(false);
+        }, (error) => {
+            console.error("Error fetching history stats:", error);
+            setLoading(false);
+        });
+
+        // Query 2: Chats Stats
+        const chatsRef = collection(db, "chats");
+        const chatsQuery = query(chatsRef, where("uid", "==", uid));
+
+        const unsubscribeChats = onSnapshot(chatsQuery, (snapshot) => {
+            chatCount = snapshot.size;
+            setStats(prevStats => ({ ...prevStats, ...historyCount, chats: chatCount }));
+            if (historyCount.posts !== undefined) setLoading(false);
+        }, (error) => {
+            console.error("Error fetching chat stats:", error);
+        });
+
+        return () => {
+            unsubscribeHistory();
+            unsubscribeChats();
+        };
+    }, [uid]);
+
+    const statsList = useMemo(() => {
+        const totalTextGenerated = stats.chats + stats.captions + stats.ideas + stats.tweets + stats.scripts;
+
+        return [
+            { icon: "📝", value: totalTextGenerated, label: "Text Generated", color: "#a855f7" },
+            { icon: "✍️", value: stats.posts, label: "Posts Generated", color: "#ec4899" },
+            { icon: "💬", value: stats.chats, label: "AI Conversations", color: "#8b5cf6" }
+        ];
+    }, [stats]);
+
+    if (!loading && !onboarded) {
+        return <Navigate to="/guide/onboarding" replace />;
+    }
+
+    if (loading) return <div style={{ padding: '40px', color: '#a0a0b0' }}>Loading Dashboard...</div>;
+
+    const pageStyle = { padding: "40px", maxWidth: "1400px", margin: "0 auto" };
+
+    const headerStyle = {
+        marginBottom: "40px",
+        animation: "fadeIn 0.5s ease-out"
+    };
+
+    const titleStyle = {
+        fontSize: "3rem",
+        fontWeight: "800",
+        background: "linear-gradient(135deg, #a855f7, #ec4899)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        marginBottom: "8px"
+    };
+
+    const subtitleStyle = {
+        fontSize: "1.2rem",
+        color: "#a0a0b0"
+    };
+
+    const gridStyle = {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+        gap: "24px",
+        marginBottom: "32px"
+    };
+
+    const statsGridStyle = {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gap: "20px"
+    };
+
+    return (
+        <div style={pageStyle}>
+            <KeyframeStyles />
+
+            <div style={headerStyle}>
+                <h1 style={titleStyle}>Mission Control 🚀</h1>
+                <p style={subtitleStyle}>Your AI-powered content creation dashboard</p>
+            </div>
+
+            <MissingFieldsAlert missingFields={missingFields} />
+
+            <div style={gridStyle}>
+                <MissionStatusCard brandCompletion={brandCompletion} />
+                <QuickAccessCard />
+            </div>
+
+            <h2 style={{ fontSize: '1.8rem', fontWeight: '700', color: '#fff', marginBottom: '20px' }}>
+                📊 Your Stats
+            </h2>
+            <div style={statsGridStyle}>
+                {statsList.map(stat => (
+                    <StatCard key={stat.label} {...stat} />
+                ))}
+            </div>
+        </div>
+    );
+}

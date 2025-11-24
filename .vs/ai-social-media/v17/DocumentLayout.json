@@ -1,0 +1,551 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoScriptGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\VideoScriptGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\TweetGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\TweetGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\IdeaGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\IdeaGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\CaptionGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\CaptionGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\PostGenerator.jsx||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\PostGenerator.jsx||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\GeneratorLayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\GeneratorLayout.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\BrandSetup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\BrandSetup.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\guide\\Roadmap.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\guide\\Roadmap.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\App.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\App.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\YourGuidePage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\YourGuidePage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\RoadmapDashboard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\RoadmapDashboard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GeneratorHub.jsx||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\GeneratorHub.jsx||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Dashboard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\Dashboard.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Sidebar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Sidebar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Navbar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Navbar.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GuideFlow.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\GuideFlow.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\styles\\GuideFlowStyles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\styles\\GuideFlowStyles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\OnboardingPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\OnboardingPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\firebase.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\services\\firebase.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\AutomationPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\AutomationPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\VideoGenerator.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:functions\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GenerateContent.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\GenerateContent.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\DownloadPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\DownloadPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\HistoryPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\pages\\HistoryPage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Loader.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\components\\Loader.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:functions\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\aiHandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:functions\\aiHandler.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\aiApi.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\services\\aiApi.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GeneratorLayout.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\GeneratorLayout.jsx",
+              "RelativeDocumentMoniker": "src\\components\\GeneratorLayout.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\GeneratorLayout.jsx",
+              "RelativeToolTip": "src\\components\\GeneratorLayout.jsx",
+              "ViewState": "AgIAAAABAAAAAAAAAAAcwDgBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T18:42:46.042Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Roadmap.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\guide\\Roadmap.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\guide\\Roadmap.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\guide\\Roadmap.jsx",
+              "RelativeToolTip": "src\\pages\\guide\\Roadmap.jsx",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAgwMUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T17:28:57.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "App.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\App.jsx",
+              "RelativeDocumentMoniker": "src\\App.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\App.jsx",
+              "RelativeToolTip": "src\\App.jsx",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAQwKoAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:09:43.576Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CaptionGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\CaptionGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\CaptionGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\CaptionGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\CaptionGenerator.jsx",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAQwPkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:19:34.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IdeaGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\IdeaGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\IdeaGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\IdeaGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\IdeaGenerator.jsx",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAQwMQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:20:05.161Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TweetGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\TweetGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\TweetGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\TweetGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\TweetGenerator.jsx",
+              "ViewState": "AgIAAK8AAAAAAAAAAAAQwOcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:57:37.132Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PostGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\PostGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\PostGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\PostGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\PostGenerator.jsx",
+              "ViewState": "AgIAACEBAAAAAAAAAAAcwFkBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:55:10.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VideoScriptGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoScriptGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\VideoScriptGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoScriptGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\VideoScriptGenerator.jsx",
+              "ViewState": "AgIAAL4BAAAAAAAAAAAMwOABAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:56:12.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "YourGuidePage.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\YourGuidePage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\YourGuidePage.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\YourGuidePage.jsx",
+              "RelativeToolTip": "src\\pages\\YourGuidePage.jsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T16:24:19.673Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RoadmapDashboard.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\RoadmapDashboard.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\RoadmapDashboard.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\RoadmapDashboard.jsx",
+              "RelativeToolTip": "src\\pages\\RoadmapDashboard.jsx",
+              "ViewState": "AgIAADYAAAAAAAAAAAAQwG4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T16:13:41.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GeneratorHub.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GeneratorHub.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\GeneratorHub.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GeneratorHub.jsx",
+              "RelativeToolTip": "src\\pages\\GeneratorHub.jsx",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAAAKQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T16:49:22.636Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Sidebar.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Sidebar.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Sidebar.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Sidebar.jsx",
+              "RelativeToolTip": "src\\components\\Sidebar.jsx",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAcwKoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:09:54.148Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Navbar.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Navbar.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Navbar.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Navbar.jsx",
+              "RelativeToolTip": "src\\components\\Navbar.jsx",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAQwFcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:09:49.397Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "GuideFlow.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GuideFlow.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\GuideFlow.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GuideFlow.jsx",
+              "RelativeToolTip": "src\\pages\\GuideFlow.jsx",
+              "ViewState": "AgIAAKEBAAAAAAAAAAAcwNkBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T14:15:03.612Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BrandSetup.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\BrandSetup.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\BrandSetup.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\BrandSetup.jsx",
+              "RelativeToolTip": "src\\pages\\BrandSetup.jsx",
+              "ViewState": "AgIAADoBAAAAAAAAAAAcwHIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:10:07.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "GuideFlowStyles.css",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\styles\\GuideFlowStyles.css",
+              "RelativeDocumentMoniker": "src\\styles\\GuideFlowStyles.css",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\styles\\GuideFlowStyles.css",
+              "RelativeToolTip": "src\\styles\\GuideFlowStyles.css",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAswEYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-16T15:41:15.775Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Dashboard.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Dashboard.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\Dashboard.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Dashboard.jsx",
+              "RelativeToolTip": "src\\pages\\Dashboard.jsx",
+              "ViewState": "AgIAAGoBAAAAAAAAAAAcwKIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:10:02.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "OnboardingPage.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\OnboardingPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\OnboardingPage.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\OnboardingPage.jsx",
+              "RelativeToolTip": "src\\pages\\OnboardingPage.jsx",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAQwLoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T14:12:40.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AutomationPage.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\AutomationPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\AutomationPage.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\AutomationPage.jsx",
+              "RelativeToolTip": "src\\pages\\AutomationPage.jsx",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAQwKMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T14:16:16.611Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "firebase.js",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\firebase.js",
+              "RelativeDocumentMoniker": "src\\services\\firebase.js",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\firebase.js",
+              "RelativeToolTip": "src\\services\\firebase.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-11-16T07:14:21.384Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "VideoGenerator.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoGenerator.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\VideoGenerator.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\VideoGenerator.jsx",
+              "RelativeToolTip": "src\\pages\\VideoGenerator.jsx",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAQwKoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:59:43.507Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "HistoryPage.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\HistoryPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\HistoryPage.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\HistoryPage.jsx",
+              "RelativeToolTip": "src\\pages\\HistoryPage.jsx",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAQwKoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T11:20:59.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Login.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Login.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\Login.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\Login.jsx",
+              "RelativeToolTip": "src\\pages\\Login.jsx",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAcwLsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:09:58.554Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "index.css",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\index.css",
+              "RelativeDocumentMoniker": "src\\index.css",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\index.css",
+              "RelativeToolTip": "src\\index.css",
+              "ViewState": "AgIAADUAAAAAAAAAAAAowG8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-16T10:34:02.536Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "GenerateContent.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GenerateContent.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\GenerateContent.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\GenerateContent.jsx",
+              "RelativeToolTip": "src\\pages\\GenerateContent.jsx",
+              "ViewState": "AgIAALMBAAAAAAAAAAAcwOsBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:10:13.055Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "DownloadPage.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\DownloadPage.jsx",
+              "RelativeDocumentMoniker": "src\\pages\\DownloadPage.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\pages\\DownloadPage.jsx",
+              "RelativeToolTip": "src\\pages\\DownloadPage.jsx",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAUwKoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:10:16.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "index.js",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\index.js",
+              "RelativeDocumentMoniker": "functions\\index.js",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\index.js",
+              "RelativeToolTip": "functions\\index.js",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAANkAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-11-16T07:27:25.497Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Loader.jsx",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Loader.jsx",
+              "RelativeDocumentMoniker": "src\\components\\Loader.jsx",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\components\\Loader.jsx",
+              "RelativeToolTip": "src\\components\\Loader.jsx",
+              "ViewState": "AgIAABUAAAAAAAAAAAAQwE0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-11-16T07:23:06.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "package.json",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\package.json",
+              "RelativeDocumentMoniker": "functions\\package.json",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\package.json",
+              "RelativeToolTip": "functions\\package.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-16T07:32:26.772Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "aiHandler.js",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\aiHandler.js",
+              "RelativeDocumentMoniker": "functions\\aiHandler.js",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\functions\\aiHandler.js",
+              "RelativeToolTip": "functions\\aiHandler.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-11-16T07:27:48.679Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "aiApi.js",
+              "DocumentMoniker": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\aiApi.js",
+              "RelativeDocumentMoniker": "src\\services\\aiApi.js",
+              "ToolTip": "D:\\6 Projects\\Ai Social Media Creator\\ai-social-media\\src\\services\\aiApi.js",
+              "RelativeToolTip": "src\\services\\aiApi.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-11-16T07:16:09.507Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
