@@ -8,7 +8,9 @@ import { auth, db, doc, getDoc, onSnapshot } from "./services/firebase";
 // Core layout components
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import ImmersiveBackground from "./components/ImmersiveBackground";
 
+// Pages (lazy-loaded to improve startup performance)
 // Pages (lazy-loaded to improve startup performance)
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -214,15 +216,18 @@ function AppContent() {
     // Hide navbar for these routes
     // We'll render Guide/Login pages without the main layout
     return (
-        <LayoutRouter
-            user={user}
-            userInfo={userInfo}
-            setUserInfo={setUserInfo}
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-            setIsTestActive={setIsTestActive}
-            isMobile={isMobile}
-        />
+        <>
+            <ImmersiveBackground />
+            <LayoutRouter
+                user={user}
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+                setIsTestActive={setIsTestActive}
+                isMobile={isMobile}
+            />
+        </>
     );
 }
 

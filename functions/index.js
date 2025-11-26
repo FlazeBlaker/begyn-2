@@ -1,5 +1,6 @@
 // functions/index.js
 const { onRequest } = require("firebase-functions/v2/https");
+require("dotenv").config();
 const admin = require("firebase-admin");
 const { FieldValue } = require("firebase-admin/firestore");
 
@@ -11,7 +12,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const sharp = require("sharp");
 // Initialize Gemini with the provided API Key (env var)
 // Initialize Gemini with the provided API Key (env var)
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "AIzaSyBTE9GkRl051i6WVOUp3IzMU0uHn23pwgQ");
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 // --- MAIN FUNCTION (HTTP) ---
 // --- MAIN FUNCTION (HTTP) ---
@@ -730,7 +731,7 @@ exports.createStripeCheckout = onCall(
         if (!uid) throw new Error("unauthenticated: User must be logged in.");
 
         const { packageId, price, credits, successUrl, cancelUrl } = request.data;
-        const stripe = require("stripe")(process.env.STRIPE_KEY || "dummy_key");
+        const stripe = require("stripe")(process.env.STRIPE_KEY);
 
         try {
             const session = await stripe.checkout.sessions.create({
@@ -789,7 +790,7 @@ exports.createRazorpayOrder = onCall(
         try {
             const Razorpay = require("razorpay");
             const razorpay = new Razorpay({
-                key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_RiqljtmPi9aTaS",
+                key_id: process.env.RAZORPAY_KEY_ID,
                 key_secret: process.env.RAZORPAY_KEY_SECRET,
             });
 

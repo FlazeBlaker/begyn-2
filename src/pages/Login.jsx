@@ -56,9 +56,7 @@ export default function Login() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e)',
-            backgroundSize: '400% 400%',
-            animation: 'gradientBG 15s ease infinite',
+            background: 'transparent',
             overflow: 'hidden',
             padding: '20px'
         }}>

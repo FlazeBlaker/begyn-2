@@ -1,5 +1,5 @@
 ﻿// src/pages/DownloadPage.jsx
-import React, { useState } from "react";
+import React from "react";
 
 export default function DownloadPage() {
     const downloads = [
@@ -11,7 +11,8 @@ export default function DownloadPage() {
             size: "1.2 MB",
             icon: "📅",
             color: "from-blue-400 to-blue-600",
-            link: "#"
+            link: "https://firebasestorage.googleapis.com/v0/b/ai-social-media-19b8b.firebasestorage.app/o/downloads%2F30-Day_Content_Calendar_Premium.xlsx?alt=media&token=d8a963d1-a7dd-4b06-a826-502da963e7cc",
+            disabled: false
         },
         {
             id: 2,
@@ -21,7 +22,8 @@ export default function DownloadPage() {
             size: "4.5 MB",
             icon: "#️⃣",
             color: "from-purple-400 to-purple-600",
-            link: "#"
+            link: "#",
+            disabled: true
         },
         {
             id: 3,
@@ -31,7 +33,8 @@ export default function DownloadPage() {
             size: "2.1 MB",
             icon: "🎣",
             color: "from-orange-400 to-orange-600",
-            link: "#"
+            link: "#",
+            disabled: true
         },
         {
             id: 4,
@@ -41,7 +44,8 @@ export default function DownloadPage() {
             size: "1.8 MB",
             icon: "🎬",
             color: "from-pink-400 to-pink-600",
-            link: "#"
+            link: "#",
+            disabled: true
         },
         {
             id: 5,
@@ -51,7 +55,8 @@ export default function DownloadPage() {
             size: "N/A",
             icon: "🎨",
             color: "from-teal-400 to-teal-600",
-            link: "#"
+            link: "#",
+            disabled: true
         },
         {
             id: 6,
@@ -61,7 +66,8 @@ export default function DownloadPage() {
             size: "1.5 MB",
             icon: "📈",
             color: "from-indigo-400 to-indigo-600",
-            link: "#"
+            link: "#",
+            disabled: true
         }
     ];
 
@@ -91,25 +97,14 @@ export default function DownloadPage() {
                 {downloads.map((item) => (
                     <div
                         key={item.id}
+                        className="card"
                         style={{
-                            background: "var(--bg-card)",
-                            border: "1px solid var(--border-color)",
-                            borderRadius: "20px",
-                            padding: "clamp(20px, 5vw, 30px)",
                             display: "flex",
                             flexDirection: "column",
-                            transition: "transform 0.2s, box-shadow 0.2s",
-                            cursor: "pointer",
+                            cursor: item.disabled ? "default" : "pointer",
                             position: "relative",
-                            overflow: "hidden"
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-5px)";
-                            e.currentTarget.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "none";
+                            overflow: "hidden",
+                            opacity: item.disabled ? 0.7 : 1
                         }}
                     >
                         <div style={{
@@ -139,27 +134,53 @@ export default function DownloadPage() {
                                 <span style={{ fontSize: "0.8rem", color: "#cbd5e1", fontWeight: 600 }}>{item.type}</span>
                                 <span style={{ fontSize: "0.75rem", color: "#64748b" }}>{item.size}</span>
                             </div>
-                            <button style={{
-                                background: "white",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "8px",
-                                padding: "8px 16px",
-                                fontSize: "0.9rem",
-                                fontWeight: 600,
-                                cursor: "pointer",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                minHeight: "44px" // Touch target
-                            }}>
-                                <span>Download</span>
-                                <span style={{ fontSize: "1.1rem" }}>↓</span>
-                            </button>
+
+                            {item.disabled ? (
+                                <button disabled style={{
+                                    background: "rgba(255,255,255,0.1)",
+                                    color: "#94a3b8",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    padding: "8px 16px",
+                                    fontSize: "0.85rem",
+                                    fontWeight: 600,
+                                    cursor: "not-allowed",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    minHeight: "44px"
+                                }}>
+                                    Coming Soon
+                                </button>
+                            ) : (
+                                <a
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ textDecoration: 'none' }}
+                                >
+                                    <button style={{
+                                        background: "white",
+                                        color: "black",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "8px 16px",
+                                        fontSize: "0.9rem",
+                                        fontWeight: 600,
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "6px",
+                                        minHeight: "44px"
+                                    }}>
+                                        <span>Download</span>
+                                        <span style={{ fontSize: "1.1rem" }}>↓</span>
+                                    </button>
+                                </a>
+                            )}
                         </div>
                     </div>
                 ))}
             </div>
-        </div >
+        </div>
     );
 }

@@ -12,7 +12,7 @@ export const startRazorpayOrder = async ({ packageId, price, credits, userId }) 
         console.warn("Backend call failed, falling back to client-side mock:", err);
         // Client-side Mock Fallback
         const mockData = {
-            key: "rzp_test_mock_key",
+            key: import.meta.env.VITE_RAZORPAY_MOCK_KEY || "rzp_test_mock_key",
             amount: price * 100,
             currency: "INR",
             id: "order_mock_fallback_" + Date.now()
@@ -23,7 +23,7 @@ export const startRazorpayOrder = async ({ packageId, price, credits, userId }) 
 
 function handleRazorpayData(data, packageId, price, credits) {
     // Check for Mock Mode
-    if (data.key === "rzp_test_mock_key") {
+    if (data.key === (import.meta.env.VITE_RAZORPAY_MOCK_KEY || "rzp_test_mock_key")) {
         console.log("Starting Mock Razorpay Flow...");
         const confirm = window.confirm(`[MOCK PAYMENT]\n\nPay ₹${price} for ${credits} credits?`);
         if (confirm) {

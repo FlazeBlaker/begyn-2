@@ -33,8 +33,8 @@ service cloud.firestore {
 
     // Chats collection: Users can read/write their own chats
     match /chats/{chatId} {
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      allow read, update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow read, update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
   }
 }

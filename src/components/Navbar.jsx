@@ -24,18 +24,18 @@ export default function Navbar({ isTestActive, userInfo, isMobile, onMenuClick }
     return (
         <nav style={{
             height: "70px",
-            borderBottom: "1px solid var(--border-color)",
+            borderBottom: "1px solid var(--glass-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             padding: "0 24px",
-            background: "var(--bg-secondary)",
+            background: "var(--glass-bg)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
             position: "sticky",
             top: 0,
             zIndex: 40,
-            boxShadow: "var(--shadow-sm)"
+            boxShadow: "var(--glass-shadow)"
         }}>
             {/* Left: Page Title (and Menu Button on Mobile) */}
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>

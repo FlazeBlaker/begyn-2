@@ -283,10 +283,10 @@ export default function Sidebar({
             minWidth: isMobile ? "0" : "80px", // On mobile, minWidth is 0 to allow full collapse
             height: "100vh",
             flexShrink: 0,
-            background: "var(--bg-secondary)",
+            background: "var(--glass-bg)",
             backdropFilter: "blur(25px)",
             WebkitBackdropFilter: "blur(25px)",
-            borderRight: "1px solid var(--border-color)",
+            borderRight: "1px solid var(--glass-border)",
             padding: isSidebarOpen ? "24px 16px" : "24px 8px",
             boxSizing: "border-box",
             display: "flex",
@@ -294,7 +294,7 @@ export default function Sidebar({
             transition: "all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)",
             willChange: "transform, width",
             overflowX: "hidden",
-            boxShadow: "var(--shadow-sm)",
+            boxShadow: "var(--glass-shadow)",
             zIndex: isMobile ? 1000 : 50, // Higher z-index on mobile
             position: isMobile ? "fixed" : "relative", // Fixed on mobile
             left: 0,
@@ -305,8 +305,8 @@ export default function Sidebar({
     );
 
     const titleContainerStyle = {
-        paddingBottom: "20px",
-        marginBottom: "20px",
+        paddingBottom: "0px",
+        marginBottom: "5px",
         display: "flex",
         justifyContent: isSidebarOpen ? "space-between" : "center",
         alignItems: "center",
@@ -397,14 +397,14 @@ export default function Sidebar({
                                     transition: "opacity 0.3s ease",
                                     display: "flex",
                                     alignItems: "center",
-                                    height: "32px",
+                                    height: "60px",
                                     overflow: "hidden",
                                     cursor: "pointer",
                                     gap: "10px"
                                 }}
                             >
                                 <img
-                                    src="/logos/blueLogo.png"
+                                    src="/logos/logo.png"
                                     alt="Luma"
                                     style={{
                                         height: "100%",

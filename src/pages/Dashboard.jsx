@@ -66,11 +66,7 @@ const MissionStatusCard = ({ completion }) => (
 
 // Quick Access Card
 const QuickAccessCard = () => (
-    <div style={{
-        background: 'rgba(35,35,45,0.5)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '16px',
-        padding: '20px',
+    <div className="card" style={{
         animation: 'fadeIn 0.7s'
     }}>
         <h3 style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', fontWeight: '700', marginBottom: '16px', color: '#fff' }}>
@@ -101,13 +97,10 @@ const QuickAccessCard = () => (
 
 // Stat Card
 const StatCard = ({ icon, value, label, color }) => (
-    <div style={{
-        background: 'rgba(35,35,45,0.5)',
-        border: `1px solid ${color}33`,
-        borderRadius: '16px',
-        padding: '20px',
+    <div className="card" style={{
         textAlign: 'center',
-        animation: 'fadeIn 0.8s'
+        animation: 'fadeIn 0.8s',
+        border: `1px solid ${color}33` // Keep color border override
     }}>
         <div style={{ fontSize: 'clamp(2rem, 8vw, 3rem)', marginBottom: '12px' }}>{icon}</div>
         <div style={{ fontSize: 'clamp(2rem, 6vw, 2.5rem)', fontWeight: '800', color, marginBottom: '8px' }}>

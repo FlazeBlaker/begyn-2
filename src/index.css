@@ -19,6 +19,16 @@
     --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
     --gradient-1: linear-gradient(135deg, hsla(271, 100%, 50%, 0.1) 0%, hsla(271, 100%, 50%, 0) 60%);
     --gradient-2: linear-gradient(225deg, hsla(199, 100%, 50%, 0.1) 0%, hsla(199, 100%, 50%, 0) 60%);
+    /* --- GLASSMORPHISM VARIABLES --- */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-highlight: rgba(255, 255, 255, 0.1);
+
+    /* --- NEON ACCENTS --- */
+    --neon-blue: #3b82f6;
+    --neon-purple: #8b5cf6;
+    --neon-glow: 0 0 10px rgba(139, 92, 246, 0.5);
     --shadow-sm: 0 4px 30px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
@@ -46,11 +56,17 @@
     --gradient-2: linear-gradient(225deg, hsla(290, 100%, 96%, 1) 0%, hsla(290, 100%, 98%, 0) 100%);
     --shadow-sm: 0 4px 30px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+    /* Light Mode Glass */
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.8);
 }
 
 /* --- ROOT & FONT DEFINITIONS --- */
 :root {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -139,10 +155,8 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
     /* Dynamic viewport height for mobile */
-    background: var(--bg-primary);
-    background-image: var(--gradient-1), var(--gradient-2);
-    background-attachment: fixed;
-    background-size: cover;
+    background: transparent;
+    /* Allow ImmersiveBackground to show */
     color: var(--text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
@@ -173,8 +187,10 @@ h5,
 h6 {
     margin: 0;
     padding: 0;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-primary);
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    letter-spacing: -0.02em;
 }
 
 p {
@@ -202,13 +218,24 @@ button {
     min-height: var(--touch-target-min);
     min-width: var(--touch-target-min);
     font-size: 1em;
-    font-weight: 500;
+    font-weight: 600;
     font-family: inherit;
     background-color: transparent;
     cursor: pointer;
-    transition: var(--transition-base);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--text-primary);
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
 }
 
 /* Larger touch targets on desktop */
@@ -486,16 +513,19 @@ select:focus {
 
 /* --- TOUCH-FRIENDLY CARD --- */
 .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
-    transition: var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
 }
 
 .card:hover {
-    border-color: var(--border-strong);
-    transform: translateY(-2px);
+    border-color: var(--glass-highlight);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 /* --- STICKY MOBILE HEADER --- */
