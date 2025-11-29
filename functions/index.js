@@ -11,10 +11,161 @@ const db = admin.firestore();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const sharp = require("sharp");
 // Initialize Gemini with the provided API Key (env var)
-// Initialize Gemini with the provided API Key (env var)
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || process.env.VITE_GOOGLE_AI_API_KEY);
 
-// --- MAIN FUNCTION (HTTP) ---
+const STRATEGIST_SYSTEM_PROMPT = `You are an elite, MrBeast-level, top-0.1% thumbnail strategist and visual director.
+
+Your job is to generate HIGHLY CLICKABLE thumbnails for:
+YouTube, Instagram, Twitter/X, Facebook, and LinkedIn.
+
+This system must work for ANY topic, including topics never seen before.
+
+────────────────────────────
+CORE RESPONSIBILITIES
+────────────────────────────
+
+1. Automatically analyze the given topic/title and infer:
+   - Content type
+   - Emotional hook
+   - Scale (personal / group / massive)
+   - Environment (game, studio, street, challenge, tech, lifestyle, business, education, etc.)
+   - Realism level required (real photo, cinematic realism, stylized, game art, CGI)
+   - Target audience intent (shock, curiosity, learning, dominance, money, fun, controversy, inspiration)
+
+2. From this analysis, YOU MUST:
+   - Derive a suitable THUMBNAIL ARCHETYPE
+   - Create one if it does not already exist
+
+Thumbnail archetypes are NOT limited.
+You may invent new archetypes dynamically when needed.
+
+────────────────────────────
+ARCHETYPE LEARNING RULE (CRITICAL)
+────────────────────────────
+
+Reference images provided by the user define CANONICAL visual archetypes.
+
+When a new topic resembles:
+- the scale
+- structure
+- emotion
+- or visual logic of any reference image
+
+→ You MUST adapt that visual language EVEN FOR NEW TOPICS.
+
+Do NOT copy visuals.
+Do NOT reuse faces.
+DO replicate:
+- composition logic
+- subject hierarchy
+- repetition patterns
+- emotion framing
+- background cleanliness or chaos
+- realism vs exaggeration
+
+If no reference matches, create a NEW archetype using proven high-CTR YouTube logic.
+
+────────────────────────────
+THUMBNAIL CREATION RULES
+────────────────────────────
+
+• Thumbnails must be understandable in < 0.3 seconds
+• One clear idea only
+• Extreme clarity with minimal clutter
+• Emotion MUST be visible
+• Composition must guide the eye instantly
+• If numbers are used, they must feel LARGE-SCALE or HIGH-STAKES
+
+Never design a “pretty” thumbnail.
+Design a CURIOSITY WEAPON.
+
+────────────────────────────
+TEXT RENDERING RULES (CRITICAL)
+────────────────────────────
+
+If text is absolutely necessary (e.g., for a sign, UI element, or title):
+- Keep it UNDER 5 WORDS.
+- Spelling must be PERFECT.
+- Font must be LARGE and LEGIBLE.
+- If the concept works without text, prefer NO TEXT.
+- Do NOT include "gibberish" or small unreadable text.
+
+────────────────────────────
+PLATFORM ADAPTATION (IMPORTANT)
+────────────────────────────
+
+For EVERY topic, generate thumbnails adapted for:
+
+YouTube:
+- Highest exaggeration
+- Boldest composition
+- Max curiosity
+
+Instagram:
+- Clean crop
+- Less text
+- Strong focal subject
+
+Twitter/X:
+- Minimal text
+- One visual idea
+- Clear contrast
+
+Facebook:
+- Emotion-driven
+- Easy to understand instantly
+
+LinkedIn:
+- Professional tone ONLY if suitable
+- Still curiosity-based, never boring
+- No cringe or clickbait language
+
+The ARCHETYPE stays the same.
+Only framing, polish, and text aggressiveness change.
+
+────────────────────────────
+OUTPUT FORMAT (MANDATORY)
+────────────────────────────
+
+For each request, output a JSON object with these keys:
+
+{
+  "analysis": "Detected Topic Breakdown...",
+  "archetype": "Chosen or Created Thumbnail Archetype...",
+  "composition": "Visual Composition Description...",
+  "subjectPlacement": "Subject Placement...",
+  "emotion": "Emotion & Body Language...",
+  "background": "Background Style...",
+  "textStrategy": "Text Strategy...",
+  "platformPrompts": {
+    "YouTube": "Full prompt for YouTube...",
+    "Instagram": "Full prompt for Instagram...",
+    "Twitter/X": "Full prompt for Twitter/X...",
+    "Facebook": "Full prompt for Facebook...",
+    "LinkedIn": "Full prompt for LinkedIn..."
+  }
+}
+
+Each platform prompt must be ready to use directly with an image generation model.
+
+────────────────────────────
+QUALITY BAR
+────────────────────────────
+
+Assume thumbnails will compete against:
+- MrBeast
+- PewDiePie
+- PopularMMOs
+- Top gaming creators
+- Top business and tech creators
+
+If the thumbnail would NOT beat them in attention,
+ITERATE internally until it does.
+
+No safe answers.
+No generic designs.
+Only viral-grade output.`;
+
 // --- MAIN FUNCTION (HTTP) ---
 // Converted to HTTP onRequest for Cloud Run / Firebase HTTP functions + CORS + long timeout
 exports.generateContent = onRequest(
@@ -466,158 +617,80 @@ exports.generateContent = onRequest(
                 }
             }
 
-            // --- SMART IMAGE GENERATION (With User Image Integration) ---
+            // --- SMART IMAGE GENERATION (Elite Strategist Logic) ---
             if (type === "smartImage") {
-                console.log("=== SMART IMAGE: Starting generation ===");
+                console.log("=== SMART IMAGE: Starting Elite Strategist Generation ===");
 
                 try {
-                    const userPlatform = payload?.platform || "Social Media";
+                    const userPlatform = (payload?.platform || "Social Media").toLowerCase();
                     const userIdea = payload?.topic || "Content";
-                    const userTones = (payload?.tones || []).join(", ") || "professional";
-                    const userImage = payload?.image; // Base64 image uploaded by user
+                    const userImage = payload?.image;
+                    let finalAspectRatio = payload?.aspectRatio || "1:1";
 
-                    console.log("Inputs:", { userPlatform, userIdea, userTones, hasImage: !!userImage, aspectRatio, faceOverlay, facePosition });
+                    // 1. CALL STRATEGIST (Gemini 1.5 Flash)
+                    console.log("Calling Strategist...");
+                    const strategy = await generateThumbnailStrategy(userIdea, userPlatform, userImage, finalAspectRatio);
 
-                    // Use payload aspectRatio if provided, otherwise auto-detect from platform
-                    let finalAspectRatio = aspectRatio; // From payload
-                    let ratioDesc = "Square aspect ratio";
+                    let finalPrompt = "";
 
-                    // Auto-detect from platform if not explicitly set
-                    if (aspectRatio === "1:1") {
-                        const p = userPlatform.toLowerCase();
-                        if (p.includes("youtube")) {
-                            finalAspectRatio = "16:9";
-                            ratioDesc = "Wide 16:9 aspect ratio for YouTube thumbnail";
-                        } else if (p.includes("twitter")) {
-                            finalAspectRatio = "16:9";
-                            ratioDesc = "Wide 16:9 aspect ratio";
-                        } else if (p.includes("story") || p.includes("tiktok") || p.includes("reel") || p.includes("short")) {
-                            finalAspectRatio = "9:16";
-                            ratioDesc = "Vertical 9:16 aspect ratio";
-                        }
+                    if (strategy && strategy.platformPrompts) {
+                        // Extract prompt for the specific platform
+                        let pKey = "YouTube"; // Default
+                        if (userPlatform.includes("insta")) pKey = "Instagram";
+                        else if (userPlatform.includes("twitter") || userPlatform.includes("x")) pKey = "Twitter/X";
+                        else if (userPlatform.includes("facebook")) pKey = "Facebook";
+                        else if (userPlatform.includes("linkedin")) pKey = "LinkedIn";
+
+                        finalPrompt = strategy.platformPrompts[pKey] || strategy.platformPrompts["YouTube"];
+                        console.log(`Strategist generated prompt for ${pKey}`);
                     } else {
-                        // Use explicitly provided aspect ratio
-                        if (finalAspectRatio === "16:9") ratioDesc = "Wide 16:9 landscape format (1920x1080 pixels)";
-                        else if (finalAspectRatio === "9:16") ratioDesc = "Vertical 9:16 portrait format (1080x1920 pixels)";
-                        else if (finalAspectRatio === "4:5") ratioDesc = "Portrait 4:5 format (1080x1350 pixels)";
-                        else if (finalAspectRatio === "1.91:1") ratioDesc = "Wide 1.91:1 format (1200x628 pixels)";
-                        else ratioDesc = "Square 1:1 format (1024x1024 pixels)";
+                        // Fallback if strategist fails
+                        console.warn("Strategist failed, using fallback prompt.");
+                        finalPrompt = `Create a high-quality ${userPlatform} image for topic: ${userIdea}. Aspect Ratio: ${finalAspectRatio}`;
                     }
 
-                    // DYNAMIC PROMPT CONSTRUCTION
-                    let prompt = "";
+                    // Append Aspect Ratio instruction strictly
+                    // We also add pixel dimensions for clarity
+                    let pixelDims = "1024x1024";
+                    let ratioKeywords = "Square";
+                    if (finalAspectRatio === "16:9") { pixelDims = "1920x1080"; ratioKeywords = "Wide Landscape"; }
+                    else if (finalAspectRatio === "9:16") { pixelDims = "1080x1920"; ratioKeywords = "Tall Vertical"; }
+                    else if (finalAspectRatio === "4:5") { pixelDims = "1080x1350"; ratioKeywords = "Vertical Portrait"; }
+                    else if (finalAspectRatio === "1.91:1") { pixelDims = "1200x628"; ratioKeywords = "Wide Link"; }
 
-                    if (userImage) {
-                        // Check if topic mentions people/person to decide if we should add the face
-                        const topicLower = userIdea.toLowerCase();
-                        const mentionsPeople = topicLower.includes('people') || topicLower.includes('person') || topicLower.includes('man') || topicLower.includes('woman') || topicLower.includes('guy') || topicLower.includes('girl');
+                    // PREPEND to make it the first thing the model sees
+                    finalPrompt = `${ratioKeywords} image (${finalAspectRatio}, ${pixelDims}). ${finalPrompt} \n\nEnsure the image is ${ratioKeywords} with aspect ratio ${finalAspectRatio}.`;
 
-                        if (mentionsPeople) {
-                            // Don't add face overlay if people are already mentioned in the topic
-                            prompt = `Create a high-quality ${userPlatform} thumbnail image for: "${userIdea}". Style: ${userTones}.
-${ratioDesc}.
-Make it engaging, modern, clean, eye-catching. Professional YouTube thumbnail style.
-IMPORTANT: This is a SINGLE CONTENT IMAGE, NOT a collage or grid. Generate ONLY ONE main thumbnail image.
-NEGATIVE CONSTRAINTS: Do NOT create multiple variations, no grid layouts, no collages, no text overlays, no UI elements, no logos.`;
-                        } else {
-                            // Add the person on the left side since they're not mentioned
-                            prompt = `You are an expert AI artist creating a PROFESSIONAL YOUTUBE THUMBNAIL.
+                    // TEXT ACCURACY INSTRUCTION
+                    finalPrompt += `\n\nCRITICAL TEXT RULE: If any text appears in the image, the spelling MUST BE PERFECT. No typos, no gibberish. If you cannot render the text perfectly, do not include it.`;
 
-**CRITICAL REQUIREMENTS:**
-1. Create a SINGLE, UNIFIED ${finalAspectRatio} thumbnail image (NOT a collage, grid, or multiple variations)
-2. The reference image shows a REAL PERSON - integrate THIS EXACT PERSON naturally on the LEFT SIDE of the scene
-3. This person should be positioned on the LEFT portion of the frame, taking up roughly 30-40% of the image width
-4. The RIGHT side should show the main context: "${userIdea}"
+                    console.log("Final Prompt:", finalPrompt);
 
-**IDENTITY PRESERVATION:**
-- The person in the reference image MUST maintain their EXACT facial features, ethnicity, age, and appearance
-- Match their skin tone, facial structure, eye shape, and distinguishing features 100%
-- Do NOT create a lookalike - it must be the SAME PERSON
+                    // 2. GENERATE IMAGE (Gemini 2.5 Flash Image)
+                    const imageModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash-image" });
 
-**COMPOSITION STYLE (MrBeast/YouTube Thumbnail):**
-- Person on LEFT: Full body or upper body shot, facing slightly towards camera, engaged with the scene
-- Person should have an expressive, energetic pose (pointing, reacting, gesturing) appropriate for: "${userIdea}"
-- Background/RIGHT side: Show the main subject matter from the topic
-- Professional lighting, photorealistic, high-definition 8K quality
-- Vibrant colors, high contrast, eye-catching composition
-- Style: ${userTones}
-- Aspect Ratio: ${ratioDesc}
-
-**NEGATIVE CONSTRAINTS:**
-- Do NOT create multiple images, grids, collages, or variations
-- Do NOT add text, titles, arrows, or graphic overlays
-- Do NOT make the person look cartoonish or animated
-- Do NOT include social media logos or UI elements
-- Generate ONLY ONE main thumbnail image
-
-Example composition: Person on left interacting with/reacting to the scene on the right.`;
-                        }
-                    } else {
-                        // Fallback for no image
-                        prompt = `Create a high-quality ${userPlatform} image for: "${userIdea}". Style: ${userTones}.
-${ratioDesc}.
-Make it engaging, modern, clean, eye-catching. Professional composition.
-IMPORTANT: This is a SINGLE CONTENT IMAGE, NOT a collage or grid. Generate ONLY ONE main image.
-NEGATIVE CONSTRAINTS: Do NOT include any social media logos, no UI elements, no buttons, no multiple variations.`;
-                    }
-
-                    console.log("Prompt:", prompt);
-                    console.log("Creating model...");
-
-                    const imageModel = genAI.getGenerativeModel({
-                        model: "gemini-2.5-flash-image"
-                    });
-
-                    console.log("Calling generateContent...");
-
-                    // Prepare parts for the API call
-                    let parts = [{ text: prompt }];
-
-                    if (userImage) {
-                        // Extract base64 data if it has the prefix
-                        const base64Data = userImage.replace(/^data:image\/\w+;base64,/, "");
-                        parts.push({
-                            inlineData: {
-                                data: base64Data,
-                                mimeType: "image/jpeg" // Assuming jpeg/png, API handles standard types
-                            }
-                        });
-                    }
+                    // We pass ONLY the prompt to the image model to let it generate from scratch based on the Strategist's description.
+                    // This avoids "copying" the reference image directly.
+                    let parts = [{ text: finalPrompt }];
 
                     const result = await imageModel.generateContent(parts);
-                    console.log("Getting response...");
                     const response = await result.response;
-
-                    console.log("Response candidates:", response.candidates?.length);
 
                     if (response.candidates && response.candidates[0]) {
                         const parts = response.candidates[0].content.parts;
-                        console.log("Parts count:", parts.length);
-
                         for (const part of parts) {
-                            if (part.text) {
-                                console.log("Text:", part.text);
-                            }
-                            if (part.inlineData && part.inlineData.mimeType && part.inlineData.mimeType.startsWith('image/')) {
-                                console.log("✅ IMAGE FOUND!");
+                            if (part.inlineData && part.inlineData.mimeType.startsWith('image/')) {
                                 let finalImage = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-
-                                // Person is now integrated directly in the main image generation
-                                // No need for face overlay compositing
-
                                 res.status(200).json({ result: finalImage });
                                 return;
                             }
                         }
                     }
-
-                    console.error("❌ No image in response");
-                    return res.status(500).json({ error: "No image data returned from model" });
+                    throw new Error("No image returned");
 
                 } catch (e) {
-                    console.error("❌ ERROR:", e && e.message ? e.message : e);
-                    console.error(e && e.stack ? e.stack : "");
-                    return res.status(500).json({ error: `Image gen failed: ${e && e.message ? e.message : "Unknown error"}` });
+                    console.error("Error:", e);
+                    return res.status(500).json({ error: e.message });
                 }
             }
 
@@ -1012,7 +1085,42 @@ function getJsonFormat(options) {
     return `[{"caption": "Caption text here", "hashtags": ["#tag1", "#tag2"]}]`;
 }
 
-// --- SCHEDULED CLEANUP: Delete images older than 30 days ---
+// --- HELPER FUNCTIONS ---
+
+async function generateThumbnailStrategy(topic, platform, image, aspectRatio) {
+    try {
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: STRATEGIST_SYSTEM_PROMPT
+        });
+
+        let prompt = `Analyze this request and generate a thumbnail strategy.
+Topic: "${topic}"
+Target Platform: "${platform}"
+Aspect Ratio: "${aspectRatio}"
+
+${image ? "REFERENCE IMAGE PROVIDED: Analyze the style, composition, and subject of the attached image. Adapt this archetype for the new topic." : "NO REFERENCE IMAGE: Create a new high-CTR archetype."}
+
+OUTPUT JSON ONLY.`;
+
+        let parts = [{ text: prompt }];
+        if (image) {
+            const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+            parts.push({ inlineData: { data: base64Data, mimeType: "image/jpeg" } });
+        }
+
+        const result = await model.generateContent(parts);
+        const response = await result.response;
+        let text = response.text();
+
+        // Clean JSON
+        text = text.replace(/```json/g, "").replace(/```/g, "").trim();
+        return JSON.parse(text);
+    } catch (e) {
+        console.error("Strategist Error:", e);
+        return null;
+    }
+}
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { getStorage } = require("firebase-admin/storage");
 

@@ -143,6 +143,10 @@ const Generators = () => {
         includeBody: false // New: Toggle for text generation in Post
     });
 
+    // Modal State
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [modalImage, setModalImage] = useState(null);
+
     // Update type from URL if it changes
     useEffect(() => {
         const typeFromUrl = searchParams.get("type");
@@ -182,6 +186,7 @@ const Generators = () => {
                     payload: {
                         topic: topic,
                         aspectRatio: advancedOptions.aspectRatio,
+                        platform: advancedOptions.platform, // Pass platform for advanced logic
                         image: selectedImage // Pass reference image if available
                     }
                 });
@@ -279,7 +284,13 @@ const Generators = () => {
                 </div>
 
                 {content.image && (
-                    <div style={{ display: "flex", justifyContent: "center", background: "#f0f0f0", borderRadius: "12px", padding: "10px", marginBottom: "20px" }}>
+                    <div
+                        style={{ display: "flex", justifyContent: "center", background: "#f0f0f0", borderRadius: "12px", padding: "10px", marginBottom: "20px", cursor: "zoom-in" }}
+                        onClick={() => {
+                            setModalImage(content.image);
+                            setShowImageModal(true);
+                        }}
+                    >
                         <img
                             src={content.image}
                             alt="Generated Result"
@@ -300,100 +311,121 @@ const Generators = () => {
     const sliderConfig = getSliderConfig(currentType, advancedOptions.length);
 
     return (
-        <GeneratorLayout
-            toolbarLeft={
-                <TypeSelector
-                    currentType={currentType}
-                    onChange={setCurrentType}
-                />
-            }
-            toolbarRight={
-                // Hide Platform Selector if type is "tweet" or "post" (Post uses Aspect Ratio)
-                (currentType === "tweet" || currentType === "post") ? null : (
-                    <PlatformSelector
-                        currentPlatform={advancedOptions.platform}
-                        onChange={(p) => setAdvancedOptions(prev => ({ ...prev, platform: p }))}
+        <>
+            <GeneratorLayout
+                toolbarLeft={
+                    <TypeSelector
+                        currentType={currentType}
+                        onChange={setCurrentType}
                     />
-                )
-            }
-            topic={{
-                label: currentType === "post" ? "Describe the image you want to create" : "What should we create today?",
-                value: topic,
-                onChange: (e) => setTopic(e.target.value),
-                placeholder: currentType === "post" ? "e.g., A futuristic city with flying cars at sunset..." : "e.g., A LinkedIn post about the future of AI in marketing..."
-            }}
-            imageUploadComponent={
-                <ImageUpload
-                    onImageChange={setSelectedImage}
-                    selectedImage={selectedImage}
-                />
-            }
-            advancedOptionsPanel={
-                <AdvancedOptionsPanel open={showAdvanced} onToggle={() => setShowAdvanced(!showAdvanced)}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "24px", alignItems: "center" }}>
+                }
+                toolbarRight={
+                    // Hide Platform Selector if type is "tweet" (Post uses Aspect Ratio AND Platform now)
+                    (currentType === "tweet") ? null : (
+                        <PlatformSelector
+                            currentPlatform={advancedOptions.platform}
+                            onChange={(p) => setAdvancedOptions(prev => ({ ...prev, platform: p }))}
+                        />
+                    )
+                }
+                topic={{
+                    label: currentType === "post" ? "Describe the image you want to create" : "What should we create today?",
+                    value: topic,
+                    onChange: (e) => setTopic(e.target.value),
+                    placeholder: currentType === "post" ? "e.g., A futuristic city with flying cars at sunset..." : "e.g., A LinkedIn post about the future of AI in marketing..."
+                }}
+                imageUploadComponent={
+                    <ImageUpload
+                        onImageChange={setSelectedImage}
+                        selectedImage={selectedImage}
+                    />
+                }
+                advancedOptionsPanel={
+                    <AdvancedOptionsPanel open={showAdvanced} onToggle={() => setShowAdvanced(!showAdvanced)}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "24px", alignItems: "center" }}>
 
-                        {/* Post Type: Aspect Ratio & Description Toggle */}
-                        {currentType === "post" && (
-                            <>
-                                <div style={{ width: "100%" }}>
-                                    <label style={{ display: "block", color: "#a0a0b0", marginBottom: "12px", fontSize: "0.9rem", fontWeight: "600", textTransform: "uppercase" }}>
-                                        Aspect Ratio
-                                    </label>
-                                    <AspectRatioSelector
-                                        currentRatio={advancedOptions.aspectRatio}
-                                        onChange={(ratio) => setAdvancedOptions(prev => ({ ...prev, aspectRatio: ratio }))}
-                                    />
-                                </div>
-                                <div style={{ width: "100%", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
-                                    <ToggleSwitch
-                                        label="📝 Include Description"
-                                        checked={advancedOptions.includeBody}
-                                        onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeBody: val }))}
-                                    />
-                                </div>
-                            </>
-                        )}
-
-                        {/* Slider & Toggles: Show if NOT Post, OR if Post + includeBody */}
-                        {(currentType !== "post" || advancedOptions.includeBody) && (
-                            <>
-                                <div style={{ width: "100%", maxWidth: "90%" }}>
-                                    <StyledSlider
-                                        label={sliderConfig.label}
-                                        min={1} max={3} step={1}
-                                        value={advancedOptions.length === "Short" ? 1 : advancedOptions.length === "Medium" ? 2 : 3}
-                                        onChange={(e) => {
-                                            const val = parseInt(e.target.value);
-                                            setAdvancedOptions(prev => ({ ...prev, length: val === 1 ? "Short" : val === 2 ? "Medium" : "Long" }));
-                                        }}
-                                    />
-                                    <div style={{ textAlign: "center", color: "#a855f7", fontSize: "0.9rem", fontWeight: "600", marginTop: "-10px" }}>
-                                        {sliderConfig.displayValue}
+                            {/* Post Type: Aspect Ratio & Description Toggle */}
+                            {currentType === "post" && (
+                                <>
+                                    <div style={{ width: "100%" }}>
+                                        <label style={{ display: "block", color: "#a0a0b0", marginBottom: "12px", fontSize: "0.9rem", fontWeight: "600", textTransform: "uppercase" }}>
+                                            Aspect Ratio
+                                        </label>
+                                        <AspectRatioSelector
+                                            currentRatio={advancedOptions.aspectRatio}
+                                            onChange={(ratio) => setAdvancedOptions(prev => ({ ...prev, aspectRatio: ratio }))}
+                                        />
                                     </div>
-                                </div>
-                                <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", justifyContent: "center" }}>
-                                    <ToggleSwitch
-                                        label="# Hashtags"
-                                        checked={advancedOptions.includeHashtags}
-                                        onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeHashtags: val }))}
-                                    />
-                                    <ToggleSwitch
-                                        label="😊 Emojis"
-                                        checked={advancedOptions.includeEmojis}
-                                        onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeEmojis: val }))}
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </AdvancedOptionsPanel>
-            }
-            generateButtonText={`Generate ${GENERATOR_TYPES.find(t => t.id === currentType)?.name}`}
-            loading={loading}
-            handleGenerate={handleGenerate}
-            error={error}
-            resultPanel={renderResultPanel()}
-        />
+                                    <div style={{ width: "100%", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "20px" }}>
+                                        <ToggleSwitch
+                                            label="📝 Include Description"
+                                            checked={advancedOptions.includeBody}
+                                            onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeBody: val }))}
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Slider & Toggles: Show if NOT Post, OR if Post + includeBody */}
+                            {(currentType !== "post" || advancedOptions.includeBody) && (
+                                <>
+                                    <div style={{ width: "100%", maxWidth: "90%" }}>
+                                        <StyledSlider
+                                            label={sliderConfig.label}
+                                            min={1} max={3} step={1}
+                                            value={advancedOptions.length === "Short" ? 1 : advancedOptions.length === "Medium" ? 2 : 3}
+                                            onChange={(e) => {
+                                                const val = parseInt(e.target.value);
+                                                setAdvancedOptions(prev => ({ ...prev, length: val === 1 ? "Short" : val === 2 ? "Medium" : "Long" }));
+                                            }}
+                                        />
+                                        <div style={{ textAlign: "center", color: "#a855f7", fontSize: "0.9rem", fontWeight: "600", marginTop: "-10px" }}>
+                                            {sliderConfig.displayValue}
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", justifyContent: "center" }}>
+                                        <ToggleSwitch
+                                            label="# Hashtags"
+                                            checked={advancedOptions.includeHashtags}
+                                            onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeHashtags: val }))}
+                                        />
+                                        <ToggleSwitch
+                                            label="😊 Emojis"
+                                            checked={advancedOptions.includeEmojis}
+                                            onChange={(val) => setAdvancedOptions(prev => ({ ...prev, includeEmojis: val }))}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </AdvancedOptionsPanel>
+                }
+                generateButtonText={`Generate ${GENERATOR_TYPES.find(t => t.id === currentType)?.name}`}
+                loading={loading}
+                handleGenerate={handleGenerate}
+                error={error}
+                resultPanel={renderResultPanel()}
+            />
+
+            {/* IMAGE MODAL */}
+            {showImageModal && (
+                <div
+                    style={{
+                        position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+                        background: "rgba(0,0,0,0.9)", zIndex: 1000,
+                        display: "flex", justifyContent: "center", alignItems: "center",
+                        cursor: "zoom-out"
+                    }}
+                    onClick={() => setShowImageModal(false)}
+                >
+                    <img
+                        src={modalImage}
+                        alt="Full Size"
+                        style={{ maxWidth: "90%", maxHeight: "90%", borderRadius: "8px", boxShadow: "0 0 50px rgba(0,0,0,0.5)" }}
+                    />
+                </div>
+            )}
+        </>
     );
 };
 
