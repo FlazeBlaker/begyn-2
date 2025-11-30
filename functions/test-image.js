@@ -1,7 +1,7 @@
 // Test script to verify Gemini image generation works
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "AIzaSyBTE9GkRl051i6WVOUp3IzMU0uHn23pwgQ");
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 async function testImageGeneration() {
     try {

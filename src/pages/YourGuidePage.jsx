@@ -43,7 +43,7 @@ const formatText = (text) => {
 };
 
 // --- LOADING COMPONENT ---
-const LoadingCard = ({ height = "200px", title }) => (
+const LoadingCard = ({ height = "clamp(180px, 20vh, 250px)", title }) => (
     <div className="final-card ai-shimmer" style={{ height, width: '100%', minHeight: height, position: 'relative', overflow: 'hidden' }}>
         {title && <div className="shimmer-line" style={{ width: '40%', height: '24px', marginBottom: '20px', background: 'rgba(255,255,255,0.1)' }}></div>}
         <div className="shimmer-line" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}></div>
@@ -86,7 +86,7 @@ const RoadmapTask = ({ item, category, index, onUpdate }) => {
                             borderRadius: '4px',
                             fontSize: 'clamp(0.9rem, 3vw, 1rem)',
                             flex: '1 1 auto',
-                            minWidth: '200px'
+                            minWidth: 'clamp(180px, 30vw, 250px)'
                         }}
                     />
                     <button
@@ -121,7 +121,7 @@ const RoadmapTask = ({ item, category, index, onUpdate }) => {
                             borderRadius: '6px',
                             fontSize: 'clamp(0.85rem, 3vw, 1rem)',
                             minHeight: '44px',
-                            minWidth: '44px',
+                            minWidth: 'clamp(40px, 8vw, 50px)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -313,10 +313,10 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
         console.log("Rendering NO MISSION state. BrandData:", brandData);
         return (
             <div className="guide-container">
-                <div className="step-container" style={{ textAlign: 'center', padding: '40px' }}>
+                <div className="step-container" style={{ textAlign: 'center', padding: 'clamp(24px, 5vw, 40px)' }}>
                     <h2 style={{ fontSize: '2rem', marginBottom: '20px', color: 'var(--text-primary)' }}>No Active Mission Found</h2>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>It looks like you haven't initialized your creator roadmap yet.</p>
-                    <button onClick={retakeGuide} style={{ background: '#a855f7', color: 'white', padding: '12px 30px', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', fontSize: '1.1rem' }}>
+                    <button onClick={retakeGuide} style={{ background: '#a855f7', color: 'white', padding: 'clamp(10px, 2vw, 12px) clamp(20px, 5vw, 30px)', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', fontSize: 'clamp(1rem, 3vw, 1.1rem)' }}>
                         Initialize Begyn Mission Control
                     </button>
                 </div>
@@ -347,7 +347,7 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
             overflowY: 'auto',
             overflowX: 'hidden',
             padding: 'clamp(16px, 5vw, 40px)',
-            maxWidth: '1400px',
+            maxWidth: 'min(95vw, 1400px)',
             width: '100%',
             margin: '0 auto',
             boxSizing: 'border-box'
@@ -365,7 +365,7 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
                 paddingBottom: 'clamp(16px, 4vw, 20px)',
                 gap: 'clamp(12px, 4vw, 16px)'
             }}>
-                <div style={{ flex: '1 1 auto', minWidth: '200px' }}>
+                <div style={{ flex: '1 1 auto', minWidth: 'clamp(180px, 30vw, 250px)' }}>
                     <h1 style={{
                         fontSize: 'clamp(1.8rem, 6vw, 2.5rem)',
                         margin: 0,
@@ -641,7 +641,7 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
                 {/* RIGHT COL: DETAILED GUIDE (STATIC PLAYBOOK) */}
                 < div className={`final-card ${isMobile ? 'mobile-card' : ''}`} style={{
                     height: 'fit-content',
-                    maxHeight: '800px',
+                    maxHeight: 'clamp(600px, 60vh, 800px)',
                     overflowY: 'auto',
                     background: 'var(--bg-card)',
                     padding: 'clamp(16px, 4vw, 20px)',

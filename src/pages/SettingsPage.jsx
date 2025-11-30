@@ -86,7 +86,6 @@ export default function SettingsPage() {
     const [prefsLoading, setPrefsLoading] = useState(false);
     const [message, setMessage] = useState({ type: "", text: "" });
 
-    const [emailNotifications, setEmailNotifications] = useState(true);
     const [darkMode, setDarkMode] = useState(true);
     const [autoSave, setAutoSave] = useState(true);
 
@@ -98,7 +97,6 @@ export default function SettingsPage() {
         const unsubscribe = onSnapshot(userRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                setEmailNotifications(data.emailNotifications ?? true);
                 setDarkMode(data.darkMode ?? true);
                 setAutoSave(data.autoSave ?? true);
             }
@@ -132,10 +130,7 @@ export default function SettingsPage() {
         setPrefsLoading(false);
     };
 
-    const handleEmailNotificationsChange = (value) => {
-        setEmailNotifications(value);
-        savePreferences({ emailNotifications: value });
-    };
+
 
     const handleDarkModeChange = (value) => {
         setDarkMode(value);
@@ -269,7 +264,7 @@ export default function SettingsPage() {
             </Section>
 
             <Section title="App Preferences">
-                <Toggle label="Email Notifications" checked={emailNotifications} onChange={handleEmailNotificationsChange} disabled={prefsLoading} />
+
                 <Toggle label="Dark Mode" checked={darkMode} onChange={handleDarkModeChange} disabled={prefsLoading} />
                 <Toggle label="Auto-save Generated Content" checked={autoSave} onChange={handleAutoSaveChange} disabled={prefsLoading} />
             </Section>

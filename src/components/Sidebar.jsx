@@ -390,7 +390,7 @@ export default function Sidebar({
             <div style={sidebarStyle}>
                 <div style={titleContainerStyle}>
                     {isSidebarOpen && (
-                        <Link to="/dashboard" style={{ textDecoration: "none" }} onClick={isMobile ? toggleSidebar : undefined}>
+                        <Link to="/dashboard" style={{ textDecoration: "none" }} onClick={isSidebarOpen ? toggleSidebar : undefined}>
                             <div
                                 style={{
                                     opacity: isSidebarOpen ? 1 : 0,
@@ -457,7 +457,7 @@ export default function Sidebar({
                                 icon="🏠"
                                 isTestActive={isTestActive}
                                 isSidebarOpen={isSidebarOpen}
-                                onClick={isMobile ? toggleSidebar : undefined}
+                                onClick={isSidebarOpen ? toggleSidebar : undefined}
                             >
                                 Dashboard
                             </NavLink>
@@ -468,7 +468,7 @@ export default function Sidebar({
                                 icon="🗺️"
                                 isTestActive={isTestActive}
                                 isSidebarOpen={isSidebarOpen}
-                                onClick={isMobile ? toggleSidebar : undefined}
+                                onClick={isSidebarOpen ? toggleSidebar : undefined}
                             >
                                 {guideButtonText}
                             </NavLink>
@@ -479,7 +479,7 @@ export default function Sidebar({
                                 icon="🔧"
                                 isTestActive={isTestActive}
                                 isSidebarOpen={isSidebarOpen}
-                                onClick={isMobile ? toggleSidebar : undefined}
+                                onClick={isSidebarOpen ? toggleSidebar : undefined}
                             >
                                 Brand Setup
                             </NavLink>
@@ -495,7 +495,7 @@ export default function Sidebar({
                                 icon="✨"
                                 isTestActive={isTestActive}
                                 isSidebarOpen={isSidebarOpen}
-                                onClick={isMobile ? toggleSidebar : undefined}
+                                onClick={isSidebarOpen ? toggleSidebar : undefined}
                             >
                                 Generator
                             </NavLink>
@@ -507,7 +507,7 @@ export default function Sidebar({
                                 icon="🎥"
                                 isTestActive={isTestActive}
                                 isSidebarOpen={isSidebarOpen}
-                                onClick={isMobile ? toggleSidebar : undefined}
+                                onClick={isSidebarOpen ? toggleSidebar : undefined}
                             >
                                 AI Video (Soon)
                             </NavLink>

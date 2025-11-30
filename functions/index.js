@@ -354,7 +354,7 @@ exports.generateContent = onRequest(
             }
 
             // --- HELPER: Construct Prompts ---
-            const toneInstruction = createToneInstruction(tones);
+            const toneInstruction = createToneInstruction(payload.tone || payload.tones);
             const captionAdvancedInstruction = createCaptionAdvancedInstructions(options || {});
             const ideaAdvancedInstruction = createIdeaAdvancedInstructions(options || {});
             const jsonOutputFormat = getJsonFormat(options || {});
@@ -1090,7 +1090,9 @@ exports.onUserSignup = require("firebase-functions/v1").auth.user().onCreate(asy
 
 // --- HELPER FUNCTIONS ---
 function createToneInstruction(tones) {
-    if (!tones || tones.length === 0) return "Use a professional and engaging tone.";
+    if (!tones) return "Use a professional and engaging tone.";
+    if (typeof tones === 'string') return `Use the following tone: ${tones}.`;
+    if (Array.isArray(tones) && tones.length === 0) return "Use a professional and engaging tone.";
     return `Use the following tones: ${tones.join(", ")}.`;
 }
 

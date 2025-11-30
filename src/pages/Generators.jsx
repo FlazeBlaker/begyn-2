@@ -7,7 +7,7 @@ import GeneratorLayout, {
     SelectionButton
 } from "../components/GeneratorLayout";
 import ImageUpload from "../components/ImageUpload";
-import { auth, logUserAction, db, uploadImageToStorage } from "../services/firebase";
+import { auth, logUserAction, db, uploadImageToStorage, doc, getDoc } from "../services/firebase";
 import { generateContent } from "../services/aiApi";
 
 // --- CONSTANTS ---
@@ -136,6 +136,7 @@ const Generators = () => {
     const [error, setError] = useState("");
     const [selectedImage, setSelectedImage] = useState(null);
     const [showAdvanced, setShowAdvanced] = useState(false);
+    const [brandData, setBrandData] = useState(null); // Brand data from Firestore
 
 
     // Advanced Options State
@@ -147,7 +148,8 @@ const Generators = () => {
         includeEmojis: true,
         aspectRatio: "1:1",
         includeBody: false, // New: Toggle for text generation in Post
-        videoLength: "Medium" // New: Video script duration (Short/Medium/Long)
+        videoLength: "Medium", // New: Video script duration (Short/Medium/Long)
+        useBrandData: true // New: Toggle to use brand data or defaults
     });
 
     // Modal State
@@ -173,6 +175,24 @@ const Generators = () => {
 
 
     }, [searchParams]);
+
+    // Fetch Brand Data
+    useEffect(() => {
+        const fetchBrandData = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const brandDoc = await getDoc(doc(db, "brands", user.uid));
+                if (brandDoc.exists()) {
+                    setBrandData(brandDoc.data().brandData);
+                }
+            } catch (error) {
+                console.error("Error fetching brand data:", error);
+            }
+        };
+        fetchBrandData();
+    }, []);
 
     // Auto-set platform for Tweet type (only if not overridden by URL)
     useEffect(() => {
@@ -237,12 +257,20 @@ const Generators = () => {
                     payload: {
                         topic: topic.trim() || (selectedImage ? `Analyze this image and create engaging ${currentType === 'tweet' ? 'tweet ideas' : currentType === 'caption' ? 'caption ideas' : 'content'} based on what you see. Be creative and relevant.` : ""),
                         platform: advancedOptions.platform,
-                        tones: ["Professional", "Witty", "Friendly"],
+                        // Conditionally include brand data or defaults
+                        ...(advancedOptions.useBrandData && brandData ? {
+                            niche: brandData.coreTopic,
+                            tone: brandData.tone,
+                            targetAudience: brandData.targetAudience,
+                            contentPillars: brandData.aiGenerated?.contentPillars || [],
+                            brandVoice: brandData.brandVoice
+                        } : {
+                            tone: "Professional and engaging",
+                            targetAudience: "General audience"
+                        }),
                         image: selectedImage,
                         length: advancedOptions.length,
                         language: advancedOptions.language,
-                        includeHashtags: advancedOptions.includeHashtags,
-                        includeEmojis: advancedOptions.includeEmojis,
                         includeHashtags: advancedOptions.includeHashtags,
                         includeEmojis: advancedOptions.includeEmojis,
                         videoLength: advancedOptions.videoLength, // For video scripts
@@ -876,6 +904,11 @@ const Generators = () => {
                                         </div>
                                     </div>
                                     <div style={{ display: "flex", gap: "24px", flexWrap: "wrap", justifyContent: "center" }}>
+                                        <ToggleSwitch
+                                            label="🎯 Use Brand Data"
+                                            checked={advancedOptions.useBrandData}
+                                            onChange={(val) => setAdvancedOptions(prev => ({ ...prev, useBrandData: val }))}
+                                        />
                                         <ToggleSwitch
                                             label="# Hashtags"
                                             checked={advancedOptions.includeHashtags}

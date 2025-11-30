@@ -40,7 +40,7 @@ const dashboardStyles = `
     .bento-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: minmax(100px, auto);
+        grid-auto-rows: minmax(clamp(100px, 15vh, 150px), auto);
         gap: 20px;
     }
     /* Responsive Grid */
@@ -74,7 +74,7 @@ const dashboardStyles = `
         }
         .quick-actions-container > a {
             flex: 1;
-            min-width: 60px;
+            min-width: clamp(50px, 10vw, 80px);
         }
     }
 `;
@@ -169,7 +169,7 @@ const StatWidget = ({ icon: Icon, label, value, subtext, color, trend }) => (
 const QuickAction = ({ icon: Icon, label, to, color }) => (
     <Link to={to} className="glass-card" style={{
         padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textDecoration: 'none', color: '#fff', gap: '8px', aspectRatio: '1/1', minWidth: '80px'
+        textDecoration: 'none', color: '#fff', gap: '8px', aspectRatio: '1/1', minWidth: 'clamp(60px, 12vw, 100px)'
     }}>
         <Icon size={24} color={color} />
         <span style={{ fontSize: '0.85rem', fontWeight: '500', textAlign: 'center' }}>{label}</span>
@@ -177,7 +177,7 @@ const QuickAction = ({ icon: Icon, label, to, color }) => (
 );
 
 const AnalyticsCard = ({ usageData, timeRange, setTimeRange }) => (
-    <div className="glass-card" style={{ padding: '20px', gridColumn: 'span 2', gridRow: 'span 2' }}>
+    <div className="glass-card" style={{ padding: '20px', gridColumn: 'span 2' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <TrendingUp size={16} color="#a855f7" /> Credit Usage ({timeRange === '7d' ? '7 Days' : '30 Days'})
@@ -213,7 +213,7 @@ const AnalyticsCard = ({ usageData, timeRange, setTimeRange }) => (
                 </button>
             </div>
         </div>
-        <div style={{ height: '250px', width: '99%', minWidth: 0, position: 'relative' }}>
+        <div style={{ height: 'clamp(150px, 15vh, 250px)', width: '99%', minWidth: 0, position: 'relative' }}>
             <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={usageData.length > 0 ? usageData : MOCK_CREDIT_DATA}>
                     <defs>
@@ -354,7 +354,7 @@ export default function Dashboard() {
     if (loading) return <div style={{ padding: '40px', textAlign: 'center', color: '#a0a0b0' }}>Initializing Mission Control...</div>;
 
     return (
-        <div style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '95vw', margin: '0 auto' }}>
             <style>{dashboardStyles}</style>
 
             <NewsTicker />
