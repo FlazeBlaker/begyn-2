@@ -232,16 +232,10 @@ exports.generateContent = onRequest(
             console.log("DEBUG: Full Body:", JSON.stringify(body));
 
             const { type, payload } = body || {};
-            const topic = payload?.topic;
-            const tones = payload?.tones || [];
-            const options = payload?.options || {};
-            const image = payload?.image; // Base64 image string
-            const aspectRatio = payload?.aspectRatio || "1:1";
-            const faceOverlay = payload?.faceOverlay || false;
-            const facePosition = payload?.facePosition || "bottom-left";
 
-            console.log("DEBUG: generateContent called");
-            console.log("DEBUG: type =", type);
+            // Extract variables from payload
+            const { topic, image, options, videoLength } = payload || {};
+
             console.log("DEBUG: topic =", topic);
             console.log("DEBUG: image present =", !!image);
             console.log("DEBUG: payload keys =", Object.keys(payload || {}));
@@ -275,6 +269,8 @@ exports.generateContent = onRequest(
             if (image) {
                 requiredCredits += 1;
             }
+
+
 
             // Hashtags and CTA are now FREE (removed additional cost logic)
 
@@ -407,15 +403,32 @@ exports.generateContent = onRequest(
           - DO NOT include any introductory text.
         `,
                 videoScript: `
-          You are a professional YouTube and TikTok scriptwriter. Write a script for a short video (1-2 mins).
+          You are a professional YouTube and TikTok scriptwriter. Write a script for a video.
+          **Target Length:** ${videoLength} (${videoLength === 'Short' ? '30s-1min' : videoLength === 'Medium' ? '2-5min' : '10-15min'})
           **Brand Details:** ${brand.brandName || 'Generic Brand'}, ${brand.industry || 'General'}, ${brand.tone || 'Professional'}, ${brand.audience || 'Everyone'}
           **Video Topic:** ${topic || "See attached image"}
           ${imageInstruction}
           **Tone Instructions:** ${toneInstruction}
+          
+          **IMPORTANT: Return ONLY a valid JSON object with this exact structure:**
+          {
+            "intro": [
+              { "text": "Option 1: Hook and intro..." },
+              { "text": "Option 2: Alternative hook and intro..." }
+            ],
+            "mainContent": "The main body of the script...",
+            "outro": [
+              { "text": "Option 1: Call to action..." },
+              { "text": "Option 2: Alternative call to action..." }
+            ]
+          }
+          
           **Instructions:**
-          - Format with sections: "Hook:", "Intro:", "Main Content:", "CTA:".
+          - Provide 2 distinct options for the Intro (Hook).
+          - Provide 2 distinct options for the Outro (CTA).
+          - Provide 1 solid Main Content section that fits the target length.
           - Natural, spoken-word style.
-          - DO NOT include any introductory text.
+          - NO markdown formatting outside the JSON.
         `,
                 tweet: `
           You are a witty and viral-style Twitter/X copywriter. Generate 3 short, punchy tweets.
@@ -423,9 +436,21 @@ exports.generateContent = onRequest(
           **Topic:** ${topic || "See attached image"}
           ${imageInstruction}
           **Tone Instructions:** ${toneInstruction}
+          
+          **IMPORTANT: Return ONLY a valid JSON object with this exact structure:**
+          {
+            "tweets": [
+              { "text": "Tweet option 1..." },
+              { "text": "Tweet option 2..." },
+              { "text": "Tweet option 3..." }
+            ]
+          }
+
           **Instructions:**
-          - Under 280 characters. 1-2 hashtags. Numbered list.
+          - Under 280 characters.
+          - 1-2 hashtags max.
           - DO NOT include any introductory text.
+          - Return ONLY the JSON object.
         `,
                 dynamicGuide: `
           You are an expert brand strategist. Create a dynamic onboarding flow for a new creator.

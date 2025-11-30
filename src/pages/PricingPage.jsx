@@ -46,7 +46,7 @@ export default function PricingPage() {
             "Caption Generator",
             "Hashtag Generator",
             "Idea Generator",
-            "Post Generator"
+
         ],
         color: pkg.popular ? "from-purple-400 to-purple-600" : "from-blue-400 to-blue-600",
         popular: pkg.popular

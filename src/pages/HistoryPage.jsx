@@ -371,6 +371,89 @@ export default function HistoryPage() {
                 }
             }
 
+            // Handle flat object structure (Smart Image / Post)
+            if (content.image || content.text) {
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {content.prompt && (
+                            <div style={{
+                                fontSize: '0.9rem',
+                                color: 'var(--text-secondary)',
+                                paddingBottom: '8px',
+                                borderBottom: '1px solid var(--border-color)'
+                            }}>
+                                <strong>Prompt:</strong> {content.prompt}
+                            </div>
+                        )}
+
+                        {content.image && (
+                            <div style={{ position: 'relative' }}>
+                                <img
+                                    src={content.image}
+                                    alt="Generated Content"
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '500px',
+                                        objectFit: 'contain',
+                                        borderRadius: '8px',
+                                        border: '1px solid var(--border-color)',
+                                        background: '#000'
+                                    }}
+                                />
+                                <button
+                                    onClick={(e) => handleDownloadImage(content.image, content.prompt, e)}
+                                    style={{
+                                        marginTop: '8px',
+                                        background: 'rgba(140, 100, 255, 0.1)',
+                                        border: '1px solid rgba(140, 100, 255, 0.3)',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        padding: '8px 16px',
+                                        fontSize: '0.9rem',
+                                        color: '#a855f7',
+                                        fontWeight: '500',
+                                        width: '100%'
+                                    }}
+                                >
+                                    ⬇️ Download Image
+                                </button>
+                            </div>
+                        )}
+
+                        {content.text && (
+                            <div style={{
+                                background: 'var(--bg-secondary)',
+                                padding: '16px',
+                                borderRadius: '8px',
+                                border: '1px solid var(--border-color)'
+                            }}>
+                                <ReactMarkdown>{typeof content.text === 'string' ? content.text : JSON.stringify(content.text)}</ReactMarkdown>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const textToCopy = typeof content.text === 'string' ? content.text : JSON.stringify(content.text);
+                                        navigator.clipboard.writeText(textToCopy);
+                                        alert('Copied!');
+                                    }}
+                                    style={{
+                                        marginTop: '12px',
+                                        background: 'transparent',
+                                        border: '1px solid var(--border-color)',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        padding: '6px 12px',
+                                        fontSize: '0.85rem',
+                                        color: 'var(--text-primary)'
+                                    }}
+                                >
+                                    📋 Copy Text
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
             // Fallback for unknown format
             return (
                 <pre style={{ whiteSpace: 'pre-wrap', overflowX: 'auto', color: 'var(--text-primary)' }}>

@@ -500,6 +500,7 @@ export default function Sidebar({
                                 Generator
                             </NavLink>
                         </li>
+
                         <li>
                             <NavLink
                                 to="/video-generator"
@@ -516,7 +517,7 @@ export default function Sidebar({
 
                 {/* USER PROFILE SECTION (NOW CONTAINS MANAGE MENU) */}
                 <UserProfile isSidebarOpen={isSidebarOpen} />
-            </div>
+            </div >
         </>
     );
 }

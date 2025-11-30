@@ -13,14 +13,29 @@ const useWindowWidth = () => {
 };
 
 // --- SUB-COMPONENT: Selection Button (Compact for Toolbar) ---
-export const SelectionButton = ({ label, isSelected, isDisabled, onClick }) => {
+export const SelectionButton = ({ label, isSelected, isDisabled, onClick, isLocked, tooltip }) => {
+    const handleClick = () => {
+        if (isLocked) {
+            alert("🔒 Coming Soon!\\n\\nImage generation feature is currently under development.");
+            return;
+        }
+        if (onClick) {
+            onClick();
+        }
+    };
+
     return (
         <button
-            className={`compact-btn ${isSelected ? 'selected' : ''}`}
-            onClick={onClick}
+            className={`compact-btn ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}`}
+            onClick={handleClick}
             disabled={isDisabled}
+            style={{
+                opacity: isLocked ? 0.6 : 1,
+                cursor: isLocked ? 'not-allowed' : 'pointer'
+            }}
+            title={tooltip}
         >
-            {label}
+            {isLocked && "🔒 "}{label}
         </button>
     );
 };
@@ -55,10 +70,10 @@ export const ToggleSwitch = ({ label, checked, onChange }) => (
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
                 style={{ opacity: 0, width: 0, height: 0 }}
-                id={`toggle-${label.replace(/\s+/g, '-').toLowerCase()}`}
+                id={`toggle-${label.replace(/\\s+/g, '-').toLowerCase()}`}
             />
             <label
-                htmlFor={`toggle-${label.replace(/\s+/g, '-').toLowerCase()}`}
+                htmlFor={`toggle-${label.replace(/\\s+/g, '-').toLowerCase()}`}
                 style={{
                     position: "absolute", cursor: "pointer", top: 0, left: 0, right: 0, bottom: 0,
                     backgroundColor: checked ? "rgba(168, 85, 247, 0.5)" : "rgba(255, 255, 255, 0.1)",

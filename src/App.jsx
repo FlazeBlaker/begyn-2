@@ -26,6 +26,7 @@ const GuideFlow = lazy(() => import("./pages/GuideFlow"));
 const YourGuidePage = lazy(() => import("./pages/YourGuidePage"));
 const AutomationPage = lazy(() => import("./pages/AutomationPage"));
 
+
 const PricingPage = lazy(() => import("./pages/PricingPage"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
@@ -342,6 +343,8 @@ function LayoutRouter({ user, userInfo, setUserInfo, isSidebarOpen, setIsSidebar
                                     <AutomationPage />
                                 </PrivateRoute>
                             } />
+
+
 
                             <Route path="/guide/roadmap" element={
                                 <PrivateRoute user={user} onboarded={onboarded}>

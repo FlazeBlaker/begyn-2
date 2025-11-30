@@ -190,8 +190,6 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
                     timeEstimate: step.timeEstimate || "30 mins",
                     suggestions: step.suggestions || [],
                     resources: step.resources || [],
-                    suggestions: step.suggestions || [],
-                    resources: step.resources || [],
                     subNodes: step.subNodes || [],
                     generatorLink: step.generatorLink || null,
                     type: 'ai-generated'

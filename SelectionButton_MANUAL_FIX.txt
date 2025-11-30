@@ -1,0 +1,28 @@
+// Replace lines 16-25 in src/components/GeneratorLayout.jsx with this code:
+
+export const SelectionButton = ({ label, isSelected, isDisabled, onClick, isLocked, tooltip }) => {
+    const handleClick = () => {
+        if (isLocked) {
+            alert("🔒 Coming Soon!\n\nImage generation feature is currently under development.");
+            return;
+        }
+        if (onClick) {
+            onClick();
+        }
+    };
+
+    return (
+        <button
+            className={`compact-btn ${isSelected ? 'selected' : ''} ${isLocked ? 'locked' : ''}`}
+            onClick={handleClick}
+            disabled={isDisabled}
+            style={{
+                opacity: isLocked ? 0.6 : 1,
+                cursor: isLocked ? 'not-allowed' : 'pointer'
+            }}
+            title={tooltip}
+        >
+            {isLocked && "🔒 "}{label}
+        </button>
+    );
+};

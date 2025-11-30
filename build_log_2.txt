@@ -1,0 +1,32 @@
+
+> ai-social-media@0.0.0 build
+> vite build
+
+[33mYou are using Node.js 20.17.0. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.[39m
+[36mvite v7.2.2 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 26 modules transformed.
+[31m✗[39m Build failed in 241ms
+[31merror during build:
+[31m[vite:esbuild] Transform failed with 1 error:
+D:/6 Projects/Ai Social Media Creator/ai-social-media/src/pages/Dashboard.jsx:292:20: ERROR: Unexpected "if"[31m
+file: [36mD:/6 Projects/Ai Social Media Creator/ai-social-media/src/pages/Dashboard.jsx:292:20[31m
+[33m
+[33mUnexpected "if"[33m
+290 |          </h3>
+291 |                  const unsubBrand = onSnapshot(doc(db, "brands", u.uid), (doc) => {
+292 |                      if (doc.exists()) {
+    |                      ^
+293 |                          const data = doc.data();
+294 |          setCredits(data.credits || 0);
+[31m
+    at failureErrorWithLog (D:\6 Projects\Ai Social Media Creator\ai-social-media\node_modules\esbuild\lib\main.js:1467:15)
+    at D:\6 Projects\Ai Social Media Creator\ai-social-media\node_modules\esbuild\lib\main.js:736:50
+    at responseCallbacks.<computed> (D:\6 Projects\Ai Social Media Creator\ai-social-media\node_modules\esbuild\lib\main.js:603:9)
+    at handleIncomingPacket (D:\6 Projects\Ai Social Media Creator\ai-social-media\node_modules\esbuild\lib\main.js:658:12)
+    at Socket.readFromStdout (D:\6 Projects\Ai Social Media Creator\ai-social-media\node_modules\esbuild\lib\main.js:581:7)
+    at Socket.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)[39m

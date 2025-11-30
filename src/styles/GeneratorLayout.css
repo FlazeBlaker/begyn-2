@@ -62,7 +62,7 @@
 .studio-workspace {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.5fr;
     /* Split View */
     height: calc(100vh - var(--toolbar-height));
     overflow: hidden;
@@ -103,7 +103,7 @@
 
 .preview-device {
     width: 100%;
-    max-width: 480px;
+    max-width: 800px;
     /* Mobile-ish width */
     min-height: 600px;
     max-height: calc(100vh - 160px);

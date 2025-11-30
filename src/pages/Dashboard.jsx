@@ -232,57 +232,6 @@ const AnalyticsCard = ({ usageData, timeRange, setTimeRange }) => (
     </div>
 );
 
-const RecentActivityList = ({ history }) => (
-    <div className="glass-card" style={{ padding: '20px', gridColumn: 'span 2', gridRow: 'span 2', overflowY: 'auto', maxHeight: '350px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FileText size={16} color="#3b82f6" /> Recent Activity
-            </h3>
-            <button style={{ background: 'none', border: 'none', color: '#a0a0b0', cursor: 'pointer' }}><MoreHorizontal size={16} /></button>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {history.length === 0 ? (
-                <div style={{ textAlign: 'center', color: '#a0a0b0', padding: '20px' }}>No activity yet.</div>
-            ) : (
-                history.slice(0, 6).map((item, i) => (
-                    <div key={i} style={{
-                        display: 'flex', alignItems: 'center', gap: '12px', padding: '10px',
-                        borderRadius: '8px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)'
-                    }}>
-                        <div style={{ padding: '8px', borderRadius: '6px', background: '#262626' }}>
-                            {item.type === 'generate_image' ? <ImageIcon size={14} color="#ec4899" /> : <PenTool size={14} color="#3b82f6" />}
-                        </div>
-                        <div style={{ flex: 1, overflow: 'hidden' }}>
-                            <div style={{ fontSize: '0.9rem', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                {item.topic || "Untitled"}
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: '#a0a0b0' }}>{item.timestamp ? new Date(item.timestamp.toDate()).toLocaleDateString() : 'Just now'}</div>
-                        </div>
-                        <button style={{ background: 'none', border: 'none', color: '#a0a0b0', cursor: 'pointer' }}><Star size={14} /></button>
-                    </div>
-                ))
-            )}
-        </div>
-    </div>
-);
-
-const DailyChallenge = () => (
-    <div className="glass-card" style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05))', border: '1px solid rgba(251, 191, 36, 0.2)' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#fbbf24', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Award size={16} /> Daily Challenge
-        </h3>
-        <p style={{ fontSize: '0.9rem', color: '#e0e0e0', marginBottom: '12px' }}>
-            Generate a <strong>LinkedIn Post</strong> about "AI Ethics".
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: '#fbbf24', fontWeight: '600' }}>+50 XP Reward</span>
-            <button style={{ background: '#fbbf24', color: '#000', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer' }}>
-                Start
-            </button>
-        </div>
-    </div>
-);
-
 const StorageWidget = () => (
     <div className="glass-card" style={{ padding: '20px' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -301,10 +250,25 @@ const StorageWidget = () => (
 
 const SurpriseMe = () => {
     const navigate = useNavigate();
+
+    const SURPRISE_PROMPTS = [
+        "A futuristic city where plants glow in the dark",
+        "Top 5 productivity hacks for remote workers",
+        "The secret to making the perfect cup of coffee",
+        "Why AI will change the way we learn forever",
+        "A motivational quote about never giving up",
+        "Review of the latest tech gadget in 2025",
+        "How to start a side hustle with zero capital",
+        "The most beautiful travel destinations in Japan",
+        "Explain quantum computing to a 5-year-old",
+        "A funny story about a cat who thinks he's a dog"
+    ];
+
     const handleSurprise = () => {
-        const types = ['post', 'tweet', 'idea', 'blog'];
+        const types = ['tweet', 'idea', 'videoScript', 'caption'];
         const randomType = types[Math.floor(Math.random() * types.length)];
-        navigate(`/generate?type=${randomType}`);
+        const randomPrompt = SURPRISE_PROMPTS[Math.floor(Math.random() * SURPRISE_PROMPTS.length)];
+        navigate(`/generate?type=${randomType}&topic=${encodeURIComponent(randomPrompt)}`);
     };
 
     return (
@@ -326,7 +290,6 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [credits, setCredits] = useState(0);
     const [streak, setStreak] = useState(1);
-    const [draftsCount, setDraftsCount] = useState(0);
     const [usageData, setUsageData] = useState([]);
     const [timeRange, setTimeRange] = useState('7d');
 
@@ -343,15 +306,10 @@ export default function Dashboard() {
                     }
                 });
 
-                // 2. Fetch History & Process for Usage/Drafts
+                // 2. Fetch History & Process for Usage
                 const unsubHistory = onSnapshot(collection(db, "users", u.uid, "history"), (snap) => {
                     const data = snap.docs.map(d => d.data()).sort((a, b) => b.timestamp - a.timestamp);
                     setHistory(data);
-
-                    // Calculate Drafts
-                    const drafts = data.filter(item => item.status === 'draft').length;
-                    setDraftsCount(drafts);
-
                     setLoading(false);
                 });
 
@@ -393,29 +351,6 @@ export default function Dashboard() {
 
     }, [history, timeRange]);
 
-    const handleExport = () => {
-        if (!history.length) return;
-
-        const headers = ["Date", "Type", "Topic", "Content", "Status"];
-        const csvContent = [
-            headers.join(","),
-            ...history.map(item => {
-                const date = item.timestamp ? new Date(item.timestamp.toDate()).toLocaleDateString() : "";
-                const content = item.content ? `"${item.content.replace(/"/g, '""')}"` : ""; // Escape quotes
-                return [date, item.type, `"${item.topic}"`, content, item.status || "published"].join(",");
-            })
-        ].join("\n");
-
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", `begyn_history_export_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
     if (loading) return <div style={{ padding: '40px', textAlign: 'center', color: '#a0a0b0' }}>Initializing Mission Control...</div>;
 
     return (
@@ -437,7 +372,6 @@ export default function Dashboard() {
                             <p style={{ fontSize: '0.8rem', color: '#a0a0b0' }}>Jump straight into creation.</p>
                         </div>
                         <div className="quick-actions-container" style={{ flex: '2 1 auto' }}>
-                            <QuickAction icon={Linkedin} label="Post" to="/generate?type=post" color="#0077b5" />
                             <QuickAction icon={Twitter} label="Tweet" to="/generate?type=tweet" color="#1da1f2" />
                             <QuickAction icon={FileText} label="Caption" to="/generate?type=caption" color="#ec4899" />
                             <QuickAction icon={Lightbulb} label="Idea" to="/generate?type=idea" color="#fbbf24" />
@@ -445,12 +379,11 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* ROW 2: Analytics & Activity */}
+                    {/* ROW 2: Analytics */}
                     <AnalyticsCard usageData={usageData} timeRange={timeRange} setTimeRange={setTimeRange} />
-                    <RecentActivityList history={history} />
 
                     {/* ROW 3: Widgets */}
-                    <DailyChallenge />
+
                     <SurpriseMe />
                     <StorageWidget />
 
@@ -467,28 +400,6 @@ export default function Dashboard() {
                             ))}
                         </div>
                     </div>
-
-                    {/* ROW 4: Drafts & Export */}
-                    <div className="glass-card" style={{ padding: '20px', gridColumn: 'span 2', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                        <div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Save size={16} color="#a0a0b0" /> Drafts ({draftsCount})
-                            </h3>
-                            <p style={{ fontSize: '0.8rem', color: '#a0a0b0' }}>Resume your work.</p>
-                        </div>
-                        <button style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>View All</button>
-                    </div>
-
-                    <div className="glass-card" style={{ padding: '20px', gridColumn: 'span 2', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                        <div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Download size={16} color="#a0a0b0" /> Export Data
-                            </h3>
-                            <p style={{ fontSize: '0.8rem', color: '#a0a0b0' }}>Download your analytics & history.</p>
-                        </div>
-                        <button onClick={handleExport} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>Download CSV</button>
-                    </div>
-
                 </div>
             </div>
         </div>
