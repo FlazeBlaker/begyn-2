@@ -236,6 +236,7 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
                     <h3 style={{ color: 'white', marginBottom: '10px', fontSize: '1.5rem' }}>Reset Mission?</h3>
                     <p style={{ color: '#cbd5e1', marginBottom: '25px', lineHeight: '1.5' }}>
                         Regenerating your guide will cost <strong style={{ color: '#a855f7' }}>10 credits</strong>.
+                        <br /><strong style={{ color: '#ef4444' }}>Warning: This will remove your current guide permanently.</strong>
                         <br />This action cannot be undone.
                     </p>
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>

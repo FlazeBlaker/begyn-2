@@ -273,7 +273,7 @@ export default function Sidebar({
     isMobile, // NEW PROP
 }) {
     const onboarded = userInfo?.onboarded;
-    const guideButtonText = onboarded ? "Your Guide" : "Go to Guide (Earn 10 credits!)";
+    const guideButtonText = onboarded ? "Your Guide" : "Go to Guide";
     const guideButtonPath = onboarded ? "/roadmap" : "/flow";
 
     const sidebarStyle = useMemo(

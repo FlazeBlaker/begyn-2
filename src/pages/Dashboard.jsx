@@ -44,9 +44,36 @@ const dashboardStyles = `
         gap: 20px;
     }
     /* Responsive Grid */
-    @media (max-width: 1200px) { .bento-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 900px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .bento-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1200px) { 
+        .bento-grid { grid-template-columns: repeat(3, 1fr); } 
+        .span-4 { grid-column: span 3; }
+    }
+    @media (max-width: 900px) { 
+        .bento-grid { grid-template-columns: repeat(2, 1fr); } 
+        .span-4 { grid-column: span 2; }
+    }
+    @media (max-width: 600px) { 
+        /* Keep 2 columns on mobile so stats can be side-by-side */
+        .bento-grid { grid-template-columns: repeat(2, 1fr); } 
+        /* Force larger items to full width */
+        .span-2, .span-4 { grid-column: 1 / -1; }
+    }
+
+    /* Helper Classes for Grid Spans */
+    .span-2 { grid-column: span 2; }
+    .span-4 { grid-column: span 4; }
+
+    /* Mobile Optimization */
+    @media (max-width: 768px) {
+        .glass-card { padding: 16px !important; }
+        h1 { fontSize: 1.8rem !important; }
+        .bento-grid { gap: 12px; }
+        .quick-actions-container { 
+            justify-content: center !important; 
+            flex-wrap: wrap;
+        }
+        .quick-actions-container > a { flex: 1 1 40%; } 
+    }
 `;
 
 const NewsTicker = () => (
@@ -80,8 +107,8 @@ const WelcomeHeader = ({ user }) => (
     </div>
 );
 
-const StatWidget = ({ icon: Icon, label, value, subtext, color, trend }) => (
-    <div className="glass-card" style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+const StatWidget = ({ icon: Icon, label, value, subtext, color, trend, className }) => (
+    <div className={`glass-card ${className || ''}`} style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div style={{
                 background: `${color}20`,
@@ -148,7 +175,7 @@ const QuickAction = ({ icon: Icon, label, to, color }) => (
 );
 
 const AnalyticsCard = ({ usageData, timeRange, setTimeRange }) => (
-    <div className="glass-card" style={{ gridColumn: 'span 4', padding: '24px', minHeight: '300px' }}>
+    <div className="glass-card span-4" style={{ padding: '24px', minHeight: '300px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <TrendingUp size={20} color="#CE93D8" /> Activity Overview
@@ -228,11 +255,10 @@ const SurpriseMe = () => {
     };
 
     return (
-        <button onClick={handleSurprise} className="glass-card" style={{
+        <button onClick={handleSurprise} className="glass-card span-4" style={{
             padding: '20px', width: '100%', textAlign: 'left', cursor: 'pointer',
             background: 'linear-gradient(135deg, rgba(124, 77, 255, 0.2), rgba(206, 147, 216, 0.2))',
-            border: '1px solid rgba(124, 77, 255, 0.3)',
-            gridColumn: 'span 4'
+            border: '1px solid rgba(124, 77, 255, 0.3)'
         }}>
             <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#fff', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Shuffle size={16} /> Surprise Me
@@ -333,10 +359,16 @@ export default function Dashboard() {
                 <WelcomeHeader user={user} />
 
                 <div className="bento-grid">
-                    {/* ROW 1: Stats & Quick Actions */}
+                    {/* ROW 1: Stats */}
                     <StatWidget icon={Zap} label="Credits Left" value={credits} subtext="Refills monthly" color="#fbbf24" />
                     <StatWidget icon={Flame} label="Daily Streak" value={streak} subtext="Keep it up!" color="#f97316" trend="+1" />
-                    <div className="glass-card" style={{ gridColumn: 'span 2', padding: '16px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+
+
+                    {/* ROW 3: Analytics */}
+                    <AnalyticsCard usageData={usageData} timeRange={timeRange} setTimeRange={setTimeRange} />
+
+                    {/* ROW 2: Quick Actions */}
+                    <div className="glass-card span-2" style={{ padding: '16px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div style={{ flex: '1 1 200px' }}>
                             <h3 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '4px', color: 'white' }}>Quick Actions</h3>
                             <p style={{ fontSize: '0.8rem', color: '#a0a0b0' }}>Jump straight into creation.</p>
@@ -348,11 +380,7 @@ export default function Dashboard() {
                             <QuickAction icon={Video} label="Script" to="/generate?type=videoScript" color="#ef4444" />
                         </div>
                     </div>
-
-                    {/* ROW 2: Analytics */}
-                    <AnalyticsCard usageData={usageData} timeRange={timeRange} setTimeRange={setTimeRange} />
-
-                    {/* ROW 3: Widgets */}
+                    {/* ROW 4: Widgets */}
                     <SurpriseMe />
                 </div>
             </div>
