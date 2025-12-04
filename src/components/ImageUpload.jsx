@@ -48,7 +48,7 @@ export default function ImageUpload({ selectedImage, onImageChange }) {
     return (
         <div style={{ marginBottom: "24px", animation: "fadeIn 0.5s ease-out" }}>
             <label style={{ fontSize: "1rem", fontWeight: "500", color: "#f0f0f0", marginBottom: "12px", display: "block" }}>
-                Upload Reference Image (Optional, +1 Credit)
+                Upload Reference Image (Optional)
             </label>
 
             <div

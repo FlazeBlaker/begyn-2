@@ -1,7 +1,7 @@
 // src/services/aiApi.js
 import { auth } from "./firebase";
 
-export async function generateContent({ type, payload }) {
+export async function generateContent({ type, payload = {} }) {
     // 1. Ensure user is logged in
     const user = auth.currentUser;
     if (!user) {

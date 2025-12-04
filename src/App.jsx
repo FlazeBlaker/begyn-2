@@ -262,7 +262,7 @@ function LayoutRouter({ user, userInfo, setUserInfo, isSidebarOpen, setIsSidebar
                     <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route path="/guide/onboarding" element={
                         <GuideRoute user={user}>
-                            <OnboardingPage setOnboardedStatus={(v) => { /* map as needed */ }} />
+                            {onboarded ? <Navigate to="/dashboard" replace /> : <OnboardingPage setOnboardedStatus={(v) => { /* map as needed */ }} />}
                         </GuideRoute>
                     } />
                     <Route path="/guide/flow" element={

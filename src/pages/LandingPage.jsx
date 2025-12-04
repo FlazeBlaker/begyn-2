@@ -327,7 +327,7 @@ const Features = () => (
                 <FeatureCard
                     icon={Shield}
                     title="Safe & Secure"
-                    desc="Enterprise-grade security ensuring your content and data remain private and protected."
+                    desc="Your data is used solely to generate your content. We never sell your personal information to third parties."
                 />
             </div>
         </DraggableMarquee>
@@ -563,6 +563,10 @@ const FAQ = () => {
         {
             question: "What AI model do you use?",
             answer: "We use advanced models like Gemini Pro and GPT-4 to ensure high-quality, human-like content that resonates with your audience."
+        },
+        {
+            question: "How do you use my data?",
+            answer: "We only use your data to personalize your AI content. Your inputs are processed securely via Google Gemini API and are not shared with third parties for marketing purposes."
         },
         {
             question: "Can I cancel my subscription?",

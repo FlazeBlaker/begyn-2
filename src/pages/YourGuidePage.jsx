@@ -104,7 +104,7 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
             });
 
             // Credits are now awarded on signup, not completion.
-            console.log("Guide completed.");
+
         };
 
         generateAll();
@@ -178,11 +178,33 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
         }
     };
 
-    const retakeGuide = async () => {
+    const [showResetPopup, setShowResetPopup] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
+
+    const handleResetConfirm = async () => {
         if (!uid) return;
-        if (setOnboardedStatus) setOnboardedStatus(false);
-        try { await updateDoc(doc(db, "brands", uid), { onboarded: false }); } catch (e) { console.error(e); }
-        navigate("/guide/flow");
+        setResetLoading(true);
+
+        try {
+            // 1. Deduct credits via backend
+            await generateContent({ type: "payForGuideReset" });
+
+            // 2. Reset local/firestore state
+            if (setOnboardedStatus) setOnboardedStatus(false);
+            await updateDoc(doc(db, "brands", uid), { onboarded: false });
+            navigate("/guide/flow");
+
+        } catch (error) {
+            console.error("Reset failed:", error);
+            alert("Failed to reset guide: " + (error.message || "Insufficient credits or network error."));
+            setShowResetPopup(false);
+        } finally {
+            setResetLoading(false);
+        }
+    };
+
+    const retakeGuide = () => {
+        setShowResetPopup(true);
     };
 
     // Calculate Progress
@@ -195,6 +217,47 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
         const nextStep = steps.find(s => !roadmapProgress[s.id]?.completed) || null;
         return { percent, completed, total, nextStep };
     }, [brandData, roadmapProgress]);
+
+    // --- CUSTOM POPUP COMPONENT ---
+    const ResetPopup = () => {
+        if (!showResetPopup) return null;
+        return (
+            <div style={{
+                position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                background: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(5px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000
+            }}>
+                <div style={{
+                    background: '#1e293b', padding: '30px', borderRadius: '16px',
+                    border: '1px solid rgba(140, 100, 255, 0.3)', maxWidth: '400px', width: '90%',
+                    textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                }}>
+                    <div style={{ fontSize: '3rem', marginBottom: '15px' }}>⚠️</div>
+                    <h3 style={{ color: 'white', marginBottom: '10px', fontSize: '1.5rem' }}>Reset Mission?</h3>
+                    <p style={{ color: '#cbd5e1', marginBottom: '25px', lineHeight: '1.5' }}>
+                        Regenerating your guide will cost <strong style={{ color: '#a855f7' }}>10 credits</strong>.
+                        <br />This action cannot be undone.
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                        <button onClick={() => setShowResetPopup(false)} style={{
+                            padding: '10px 20px', borderRadius: '8px', border: '1px solid #475569',
+                            background: 'transparent', color: '#cbd5e1', cursor: 'pointer', fontWeight: '600'
+                        }} disabled={resetLoading}>
+                            Cancel
+                        </button>
+                        <button onClick={handleResetConfirm} style={{
+                            padding: '10px 20px', borderRadius: '8px', border: 'none',
+                            background: '#a855f7', color: 'white', cursor: 'pointer', fontWeight: '600',
+                            display: 'flex', alignItems: 'center', gap: '8px'
+                        }} disabled={resetLoading}>
+                            {resetLoading ? <div className="spin-loader" style={{ width: '16px', height: '16px', borderTopColor: 'white' }} /> : null}
+                            Confirm & Pay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     if (loading) {
         // console.log("Rendering LOADING state");
@@ -527,6 +590,9 @@ export default function YourGuidePage({ userInfo, setOnboardedStatus }) {
                     )
                 }
             </div >
+
+            {/* POPUPS */}
+            <ResetPopup />
 
         </div >
     );

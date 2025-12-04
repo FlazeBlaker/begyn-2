@@ -199,7 +199,7 @@ exports.generateContent = onRequest(
         // ---------- end CORS ----------
 
         try {
-            console.log("DEBUG: generateContent function started");
+
 
             // Authenticate: expect Firebase ID token in Authorization Bearer header
             let uid = null;
@@ -221,11 +221,10 @@ exports.generateContent = onRequest(
 
             // Parse request body
             let body = req.body;
-            console.log("DEBUG: Raw req.body type:", typeof body);
-            console.log("DEBUG: Content-Type:", req.get('content-type'));
+
 
             if (Buffer.isBuffer(body)) {
-                console.log("DEBUG: Body is Buffer, converting to string");
+
                 try {
                     body = JSON.parse(body.toString());
                 } catch (e) {
@@ -234,7 +233,7 @@ exports.generateContent = onRequest(
             } else if (typeof body === 'string') {
                 try {
                     body = JSON.parse(body);
-                    console.log("DEBUG: Parsed body string successfully");
+
                 } catch (e) {
                     console.error("DEBUG: Failed to parse body string:", e);
                 }
@@ -242,11 +241,11 @@ exports.generateContent = onRequest(
 
             // Handle "data" wrapper (common in Firebase Callable or manual wrapping)
             if (body && body.data && !body.type) {
-                console.log("DEBUG: unwrapping 'data' property");
+
                 body = body.data;
             }
 
-            console.log("DEBUG: Full Body:", JSON.stringify(body));
+
 
             const { type, payload } = body || {};
 
@@ -267,9 +266,7 @@ exports.generateContent = onRequest(
                 numVariations: payload?.numVariations
             };
 
-            console.log("DEBUG: topic =", topic);
-            console.log("DEBUG: image present =", !!image);
-            console.log("DEBUG: payload keys =", Object.keys(payload || {}));
+
 
             // --- SECURITY: Validate and sanitize user inputs ---
             if (topic) {
@@ -299,7 +296,8 @@ exports.generateContent = onRequest(
                 smartImage: 1,  // Reduced from 2 to 1
                 dynamicGuide: 0,
                 dynamicGuideIterative: 0,
-                finalGuide: 0
+                finalGuide: 0,
+                payForGuideReset: 10 // Cost for resetting the guide
             };
 
             if (type && baseCosts.hasOwnProperty(type)) {
@@ -313,9 +311,9 @@ exports.generateContent = onRequest(
             }
 
             // Additional credit for vision API (when image is uploaded as input)
-            if (image) {
-                requiredCredits += 1;
-            }
+            // if (image) {
+            //     requiredCredits += 1;
+            // }
 
 
 
@@ -370,6 +368,11 @@ exports.generateContent = onRequest(
                 }
             }
 
+            // --- SPECIAL HANDLER: Guide Reset ---
+            if (type === "payForGuideReset") {
+                return res.status(200).json({ success: true, message: "Guide reset paid successfully." });
+            }
+
             // Validation: Most types need a topic or image, but guides use other payload data
             if (!topic && !image &&
                 type !== "dynamicGuide" &&
@@ -377,7 +380,8 @@ exports.generateContent = onRequest(
                 type !== "dynamicGuideIterative" &&
                 type !== "generateRoadmapSteps" &&
                 type !== "generateChecklist" &&
-                type !== "generatePillars"
+                type !== "generatePillars" &&
+                type !== "generateRoadmapBatch"
             ) {
                 return res.status(400).json({
                     error: "invalid-argument: The function must be called with a 'topic' or an 'image'.",
@@ -596,6 +600,34 @@ exports.generateContent = onRequest(
             "contentPillars": ["Pillar 1", "Pillar 2", "Pillar 3"]
           - Return ONLY the JSON object.
         `,
+                generateRoadmapBatch: `
+          You are an expert social media manager. Create a batch of roadmap steps.
+          **Core Data:** ${JSON.stringify(payload?.formData || {})}
+          **Dynamic Answers:** ${JSON.stringify(payload?.dynamicAnswers || [])}
+          **Batch Context:** Generating steps ${payload?.startStep} to ${payload?.endStep} (Total ${payload?.numSteps} steps in this batch).
+          
+          **Instructions:**
+          - Generate exactly ${payload?.numSteps} high-impact steps.
+          - These steps should logically follow previous steps and fit into the overall "Zero to Hero" journey.
+          - **Schema:** Return a JSON object with ONLY "steps":
+            "steps": [
+              {
+                "title": "Short Action Title",
+                "description": "Brief 1-sentence summary",
+                "detailedDescription": "Specific instructions on WHAT and HOW.",
+                "subNodes": [
+                  { "title": "Sub-Task 1", "steps": ["Step 1.1", "Step 1.2"] },
+                  { "title": "Sub-Task 2", "steps": ["Step 2.1", "Step 2.2"] }
+                ],
+                "phase": "Foundation" | "Content Creation" | "Growth" | "Monetization",
+                "timeEstimate": "e.g., 15 mins",
+                "suggestions": ["Suggestion 1", "Suggestion 2"],
+                "resources": [{ "name": "Tool Name", "url": "https://..." }],
+                "generatorLink": "/video-script-generator" | "/post-generator" | "/idea-generator" | null
+              }
+            ]
+          - Return ONLY the JSON object.
+        `,
                 finalGuide: `
           You are an expert social media manager. Create a comprehensive "Zero to Hero" action plan.
           **Core Data:** ${JSON.stringify(payload?.formData || {})}
@@ -704,7 +736,7 @@ exports.generateContent = onRequest(
 
             // --- SMART IMAGE GENERATION (Elite Strategist Logic) ---
             if (type === "smartImage") {
-                console.log("=== SMART IMAGE: Starting Elite Strategist Generation ===");
+
 
                 try {
                     const userPlatform = (payload?.platform || "Social Media").toLowerCase();
@@ -713,7 +745,7 @@ exports.generateContent = onRequest(
                     let finalAspectRatio = payload?.aspectRatio || "1:1";
 
                     // 1. CALL STRATEGIST (Gemini 1.5 Flash)
-                    console.log("Calling Strategist...");
+
                     const strategy = await generateThumbnailStrategy(userIdea, userPlatform, userImage, finalAspectRatio);
 
                     let finalPrompt = "";
@@ -727,7 +759,7 @@ exports.generateContent = onRequest(
                         else if (userPlatform.includes("linkedin")) pKey = "LinkedIn";
 
                         finalPrompt = strategy.platformPrompts[pKey] || strategy.platformPrompts["YouTube"];
-                        console.log(`Strategist generated prompt for ${pKey}`);
+
                     } else {
                         // Fallback if strategist fails
                         console.warn("Strategist failed, using fallback prompt.");
@@ -749,7 +781,7 @@ exports.generateContent = onRequest(
                     // TEXT ACCURACY INSTRUCTION
                     finalPrompt += `\n\nCRITICAL TEXT RULE: If any text appears in the image, the spelling MUST BE PERFECT. No typos, no gibberish. If you cannot render the text perfectly, do not include it.`;
 
-                    console.log("Final Prompt:", finalPrompt);
+
 
                     // 2. GENERATE IMAGE (Gemini 2.5 Flash Image)
                     const imageModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash-image" });
@@ -810,13 +842,13 @@ Post Topic: "${topic}"
 
                         for (const part of parts) {
                             if (part.text) {
-                                console.log("Image generation text:", part.text);
+
                             }
 
                             if (part.inlineData && part.inlineData.mimeType && part.inlineData.mimeType.startsWith('image/')) {
                                 const imageData = part.inlineData.data;
                                 const mimeType = part.inlineData.mimeType;
-                                console.log("Image generated successfully, size:", imageData.length, "bytes");
+
                                 res.status(200).json({ result: `data:${mimeType}; base64, ${imageData} ` });
                                 return;
                             }

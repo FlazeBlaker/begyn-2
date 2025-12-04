@@ -51,7 +51,7 @@ const Step1Niche = ({ data, updateData, next, usingBrandData }) => {
 
     return (
         <div className="step-container fadeIn">
-            <h2>?? 1. Core Foundation & Niche Definition</h2>
+            <h2>🏗️ 1. Core Foundation & Niche Definition</h2>
             {usingBrandData && (
                 <div style={{
                     background: 'rgba(140, 100, 255, 0.1)',
@@ -62,7 +62,7 @@ const Step1Niche = ({ data, updateData, next, usingBrandData }) => {
                     color: '#a855f7',
                     fontSize: '0.9rem'
                 }}>
-                    ? Pre-filled from your Brand Setup! You can edit these values.
+                    💡 Pre-filled from your Brand Setup! You can edit these values.
                 </div>
             )}
             <label htmlFor="coreTopic">Core Topic/Niche (e.g., retro gaming) *</label>
@@ -102,7 +102,7 @@ const Step2Platform = ({ data, updateData, next }) => {
 
     return (
         <div className="step-container fadeIn">
-            <h2>?? 2. Platform Selection</h2>
+            <h2>📱 2. Platform Selection</h2>
             <label htmlFor="timeCommitment">Time Commitment (Hours per week) *</label>
             <input id="timeCommitment" className="styled-input" name="timeCommitment" value={data.timeCommitment || ""} onChange={handleChange} placeholder="e.g., 8-10 hours/week" />
             <label>Content Preference (Select up to 3) *</label>
@@ -177,7 +177,7 @@ const Step3AI = ({ formData, setFormData, loading, setLoading, next }) => {
                 }
             } catch (e) {
                 console.error("Failed to parse AI JSON:", e);
-                console.log("Received data:", responseString);
+
                 // Fallback if JSON is malformed
                 result = { questions: [] };
             }
@@ -216,9 +216,9 @@ const Step3AI = ({ formData, setFormData, loading, setLoading, next }) => {
 
     return (
         <div className="step-container fadeIn" style={{ textAlign: "center" }}>
-            <h2>?? 3. Branding & Name Generation (AI)</h2>
+            <h2>🤖 3. Branding & Name Generation (AI)</h2>
             <p>Based on your Niche and Goals, the AI will now dynamically generate the remaining custom setup steps (4-{formData.dynamicSteps?.length + CORE_STEPS_COUNT || 'N'}).</p>
-            {loading ? <div className="ai-loader">?? Generating Custom Roadmap...</div> :
+            {loading ? <div className="ai-loader">🤖 Generating Custom Roadmap...</div> :
                 <CustomButton text="Start Custom AI Guide" onClick={startGeneration} disabled={!formData.coreTopic} />
             }
         </div>
@@ -354,7 +354,7 @@ const FinalReviewStep = ({ data, finish }) => {
 
     return (
         <div className="step-container fadeIn">
-            <h2>? Final Action Plan Review</h2>
+            <h2>📋 Final Action Plan Review</h2>
             <p>Review the complete AI-generated strategy and confirm your brand setup.</p>
             <div className="final-review-grid" style={{
                 display: 'grid',
@@ -446,10 +446,13 @@ export default function GuideFlow({ setOnboardedStatus }) {
 
     const nextStep = () => setCurrentStep(prev => prev + 1);
 
+    const [loadingProgress, setLoadingProgress] = useState("");
+
     const finishGuide = async () => {
         if (!uid) return;
 
         setLoading(true);
+        setLoadingProgress("Initializing roadmap generation...");
 
         // 1. Compile Dynamic Answers for AI Final Guide Prompt
         const dynamicAnswers = (formData.dynamicSteps || []).map(s => ({
@@ -466,26 +469,18 @@ export default function GuideFlow({ setOnboardedStatus }) {
 
         try {
             // A. Generate Roadmap Steps in Batches (6 batches of 5 = 30 steps)
-
             const totalSteps = 30;
-
             const batchSize = 5;
-
             const batches = Math.ceil(totalSteps / batchSize);
-
             let allSteps = [];
 
-
-
             for (let i = 0; i < batches; i++) {
-
                 const startStep = i * batchSize + 1;
-
                 const endStep = startStep + batchSize - 1;
 
+                const progressMsg = `This may take a few minutes generating step (${startStep} to ${endStep}). AI is crafting your custom strategy.`;
 
-
-                console.log(`Generating batch ${i + 1}/${batches} (Steps ${startStep}-${endStep})...`);
+                setLoadingProgress(progressMsg);
 
 
 
@@ -521,7 +516,7 @@ export default function GuideFlow({ setOnboardedStatus }) {
 
                 } catch (e) {
 
-                    console.error(`Failed to parse batch ${i + 1}:`, e);
+
 
                     continue;
 
@@ -636,7 +631,7 @@ export default function GuideFlow({ setOnboardedStatus }) {
 
             // Show notification if credits were awarded
             if (result.data && result.data.creditsAwarded > 0) {
-                alert(`?? ${result.data.message}\n\nYou now have ${result.data.newBalance} credits!`);
+                alert(`🎉 ${result.data.message}\n\nYou now have ${result.data.newBalance} credits!`);
             }
         } catch (creditError) {
             console.error("Failed to award completion credits:", creditError);
@@ -695,9 +690,21 @@ export default function GuideFlow({ setOnboardedStatus }) {
     if (loading) {
         return (
             <div className="guide-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 9999, background: 'rgba(10, 10, 15, 0.95)', backdropFilter: 'blur(10px)' }}>
-                <div className="ai-loader" style={{ fontSize: '3rem', marginBottom: '20px' }}>??</div>
+                <div className="ai-loader" style={{ fontSize: '3rem', marginBottom: '20px' }}>🤖</div>
                 <h2 style={{ color: 'white', marginBottom: '10px' }}>Generating Your 30-Step Roadmap...</h2>
-                <p style={{ color: '#a0a0b0' }}>This may take a few seconds. AI is crafting your custom strategy.</p>
+                <p style={{ color: '#a0a0b0', fontSize: '1.1rem', animation: 'pulse 2s infinite' }}>
+                    {loadingProgress || "This may take a few minutes. AI is crafting your custom strategy."}
+                </p>
+                <p style={{ color: '#ef4444', marginTop: '20px', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    ⚠️ Do not close or refresh this page
+                </p>
+                <style>{`
+                    @keyframes pulse {
+                        0% { opacity: 0.6; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0.6; }
+                    }
+                `}</style>
             </div>
         );
     }

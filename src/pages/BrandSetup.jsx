@@ -348,7 +348,7 @@ export default function BrandSetup() {
     const [industry, setIndustry] = useState("");
     const [tone, setTone] = useState("");
     const [audience, setAudience] = useState("");
-    const [colors, setColors] = useState("");
+
     const [loading, setLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -357,7 +357,7 @@ export default function BrandSetup() {
 
     // Calculate completion percentage
     const completionPercentage = useMemo(() => {
-        const fields = [brandName, industry, tone, audience, colors];
+        const fields = [brandName, industry, tone, audience];
         const filledFields = fields.filter(field => {
             if (!field) return false;
             if (typeof field === 'string') return field.trim().length > 0;
@@ -365,7 +365,7 @@ export default function BrandSetup() {
             return true;
         });
         return Math.round((filledFields.length / fields.length) * 100);
-    }, [brandName, industry, tone, audience, colors]);
+    }, [brandName, industry, tone, audience]);
 
     useEffect(() => {
         if (!uid) {
@@ -382,7 +382,7 @@ export default function BrandSetup() {
                 setIndustry(data.industry || "");
                 setTone(data.tone || "");
                 setAudience(data.audience || "");
-                setColors(data.colors || "");
+
             }
             setLoading(false);
         };
@@ -395,7 +395,7 @@ export default function BrandSetup() {
         setSaved(false);
         const ref = doc(db, "brands", uid);
         try {
-            await setDoc(ref, { brandName, industry, tone, audience, colors }, { merge: true });
+            await setDoc(ref, { brandName, industry, tone, audience }, { merge: true });
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         } catch (e) {
@@ -558,14 +558,7 @@ export default function BrandSetup() {
                     characterLimit={200}
                 />
 
-                <EnhancedInput
-                    label="Brand Colors / Visual Style"
-                    description="List your main colors or describe your visual theme."
-                    placeholder="e.g., 'Earthy tones: forest green, cream, and wood. Minimalist and cozy.'"
-                    value={colors}
-                    onChange={(e) => setColors(e.target.value)}
-                    characterLimit={100}
-                />
+
 
                 <SaveButton
                     loading={isSaving}
