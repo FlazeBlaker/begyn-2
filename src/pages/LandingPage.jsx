@@ -113,16 +113,34 @@ const Hero = ({ user }) => {
                             filter: 'drop-shadow(0 0 20px rgba(124, 77, 255, 0.5))'
                         }}
                     />
-                    <h1 style={{
-                        fontSize: 'clamp(3.5rem, 8vw, 6rem)',
-                        fontWeight: '900',
-                        lineHeight: '1',
-                        margin: 0,
-                        letterSpacing: '-2px',
-                        color: '#fff'
-                    }}>
-                        <span className="aurora-text">Begyn</span>
-                    </h1>
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                        {/* SEO H1 (Hidden but present for crawlers) */}
+                        <h1 style={{
+                            position: 'absolute',
+                            width: '1px',
+                            height: '1px',
+                            padding: 0,
+                            margin: -1,
+                            overflow: 'hidden',
+                            clip: 'rect(0, 0, 0, 0)',
+                            whiteSpace: 'nowrap',
+                            borderWidth: 0
+                        }}>
+                            Become a Social Media Influencer with AI Guidance
+                        </h1>
+
+                        {/* Visual Title */}
+                        <div style={{
+                            fontSize: 'clamp(3.5rem, 8vw, 6rem)',
+                            fontWeight: '900',
+                            lineHeight: '1',
+                            margin: 0,
+                            letterSpacing: '-2px',
+                            color: '#fff'
+                        }}>
+                            <span className="aurora-text">Begyn</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <p className="stagger-3" style={{ fontSize: '1.2rem', color: '#a0a0b0', maxWidth: '700px', margin: '0 auto 40px' }}>

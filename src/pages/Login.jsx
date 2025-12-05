@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { auth, db, doc, getDoc, GoogleAuthProvider, signInWithPopup } from '../services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { Sparkles, ArrowRight, CheckCircle, Shield, Cpu } from 'lucide-react';
 
 export default function Login() {
@@ -9,15 +9,13 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [authChecking, setAuthChecking] = useState(true);
     const [error, setError] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     // Robust Auth Check
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                // We let the handleGoogleLogin handle the redirect logic for new logins
-                // But if they are already logged in and just visiting /login, we redirect to dashboard
-                // This might need refinement if we want to support the intro flow for existing sessions
-                // For now, let's assume if they are here, they are not logged in or we want to redirect them
                 navigate('/dashboard', { replace: true });
             } else {
                 setAuthChecking(false);
@@ -47,6 +45,33 @@ export default function Login() {
             if (err.code !== 'auth/popup-closed-by-user') {
                 setError(`Login failed: ${err.message || "Unknown error"}`);
             }
+            setLoading(false);
+        }
+    };
+
+    const handleEmailLogin = async () => {
+        if (!email || !password) {
+            setError("Please enter both email and password.");
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            const userRef = doc(db, "brands", result.user.uid);
+            const snap = await getDoc(userRef);
+
+            const introSeen = snap.exists() && snap.data()?.introSeen;
+            const onboarded = snap.exists() && snap.data()?.onboarded;
+
+            if (!introSeen) {
+                navigate('/intro', { replace: true });
+            } else {
+                navigate(onboarded ? '/dashboard' : '/flow', { replace: true });
+            }
+        } catch (err) {
+            console.error("Email login failed:", err);
+            setError(`Login failed: ${err.message}`);
             setLoading(false);
         }
     };
@@ -94,21 +119,6 @@ export default function Login() {
                         <div className="hover-lift-glow" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px 20px', borderRadius: '12px' }}>
                             <Shield size={20} color="#22c55e" />
                             <span style={{ color: '#e0e0e0', fontWeight: '500' }}>No Credit Card</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* RIGHT SIDE: Login Form */}
-            <div style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
-                position: 'relative', zIndex: 1
-            }}>
-                <div className="glass-premium tech-corners stagger-2" style={{
-                    width: '100%', maxWidth: '480px', padding: '48px', borderRadius: '24px'
-                }}>
-                    <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                        <div className="floating" style={{ display: 'inline-block', marginBottom: '24px' }}>
                             <img src="/logos/logo.png" alt="Logo" style={{ height: '64px' }} />
                         </div>
                         <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '12px', color: '#fff' }}>Welcome Back</h2>
@@ -144,6 +154,42 @@ export default function Login() {
                             </>
                         )}
                     </button>
+
+                    {/* Temporary Developer Login */}
+                    <div style={{ marginTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px' }}>
+                        <p style={{ color: '#a0a0b0', fontSize: '0.8rem', marginBottom: '12px', textAlign: 'center' }}>Developer Login (Razorpay Test)</p>
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            style={{
+                                width: '100%', padding: '12px', marginBottom: '12px', borderRadius: '8px',
+                                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white'
+                            }}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={{
+                                width: '100%', padding: '12px', marginBottom: '12px', borderRadius: '8px',
+                                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white'
+                            }}
+                        />
+                        <button
+                            onClick={handleEmailLogin}
+                            disabled={loading}
+                            style={{
+                                width: '100%', padding: '12px', borderRadius: '8px',
+                                background: 'rgba(124, 77, 255, 0.2)', border: '1px solid rgba(124, 77, 255, 0.3)',
+                                color: '#CE93D8', cursor: 'pointer', fontWeight: '600'
+                            }}
+                        >
+                            Login with Email
+                        </button>
+                    </div>
 
                     <div className="neon-separator"></div>
 

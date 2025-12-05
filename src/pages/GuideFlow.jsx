@@ -420,7 +420,7 @@ export default function GuideFlow({ setOnboardedStatus }) {
         let finalGuideData = { roadmapSteps: [], sevenDayChecklist: [], contentPillars: [] };
 
         try {
-            const totalSteps = 30;
+            const totalSteps = 60;
             const batchSize = 5;
             const batches = Math.ceil(totalSteps / batchSize);
             let allSteps = [];
@@ -429,9 +429,21 @@ export default function GuideFlow({ setOnboardedStatus }) {
                 const startStep = i * batchSize + 1;
                 const endStep = startStep + batchSize - 1;
                 setLoadingProgress(`Generating steps ${startStep}-${endStep} of 30...`);
+
+                // Context: Pass the last 5 steps to maintain continuity
+                const previousStepsContext = allSteps.slice(-5).map(s => ({ title: s.title, description: s.description }));
+
                 const batchResponse = await generateContent({
                     type: "generateRoadmapBatch",
-                    payload: { topic: formData.coreTopic || 'General Content Strategy', formData: formData, dynamicAnswers: dynamicAnswers, startStep: startStep, endStep: endStep, numSteps: batchSize }
+                    payload: {
+                        topic: formData.coreTopic || 'General Content Strategy',
+                        formData: formData,
+                        dynamicAnswers: dynamicAnswers,
+                        startStep: startStep,
+                        endStep: endStep,
+                        numSteps: batchSize,
+                        previousSteps: previousStepsContext // NEW: Pass context
+                    }
                 });
                 let batchData;
                 try { batchData = typeof batchResponse === 'object' ? batchResponse : JSON.parse(batchResponse); } catch (e) { continue; }
@@ -463,8 +475,8 @@ export default function GuideFlow({ setOnboardedStatus }) {
             const { getFunctions, httpsCallable } = await import('firebase/functions');
             const funcs = getFunctions();
             const completeGuideFn = httpsCallable(funcs, 'completeGuide');
-            const result = await completeGuideFn();
-            if (result.data && result.data.creditsAwarded > 0) alert(`🎉 ${result.data.message}\n\nYou now have ${result.data.newBalance} credits!`);
+            await completeGuideFn();
+            // Alert removed as no credits are awarded anymore
         } catch (creditError) { console.error("Failed to award completion credits:", creditError); }
 
         if (setOnboardedStatus) setOnboardedStatus(true);

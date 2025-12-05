@@ -604,10 +604,14 @@ exports.generateContent = onRequest(
           You are an expert social media manager. Create a batch of roadmap steps.
           **Core Data:** ${JSON.stringify(payload?.formData || {})}
           **Dynamic Answers:** ${JSON.stringify(payload?.dynamicAnswers || [])}
+          **Previous Steps Context:** ${JSON.stringify(payload?.previousSteps || [])}. Ensure new steps logically follow these.
           **Batch Context:** Generating steps ${payload?.startStep} to ${payload?.endStep} (Total ${payload?.numSteps} steps in this batch).
           
           **Instructions:**
-          - Generate exactly ${payload?.numSteps} high-impact steps.
+          - Generate exactly ${payload?.numSteps} high-impact, **extremely granular** steps.
+          - **Granularity Rule:** Break down every major task into "baby steps". 
+            - Example: Instead of just "Create a Video", break it down: "Download OBS", "Configure Audio Settings", "Find Background Music", "Record Raw Footage", "Import to Editor", etc.
+          - **Scope:** Ensure the steps cover the full journey: Foundation -> Setup -> Creation -> Distribution -> Growth -> Monetization.
           - These steps should logically follow previous steps and fit into the overall "Zero to Hero" journey.
           - **Schema:** Return a JSON object with ONLY "steps":
             "steps": [
@@ -634,8 +638,9 @@ exports.generateContent = onRequest(
           **Dynamic Answers:** ${JSON.stringify(payload?.dynamicAnswers || [])}
           
           **Instructions:**
-          - Analyze the user's goal and generate **30-50 high-impact steps**. Focus on quality over quantity.
-          - The steps should take the user from "Day 1" (Setup) to "Day 30+" (Monetization/Growth).
+          - Analyze the user's goal and generate **60+ high-impact, extremely granular steps**. Focus on quality and detail.
+          - **Granularity Rule:** Break down every major task into "baby steps".
+          - The steps should take the user from "Day 1" (Setup) to "Day 60+" (Monetization/Growth).
           - **Schema:** You MUST return a JSON object with the following keys:
             1. "roadmapSteps": An array of objects (as defined below).
             2. "sevenDayChecklist": An array of 7 strings, representing a specific actionable checklist for the first week.
@@ -866,13 +871,26 @@ Post Topic: "${topic}"
                 }
             }
 
-            // --- TEXT GENERATION (Gemini 3.0 Pro) ---
+            // --- TEXT GENERATION (Model Selection) ---
             const selectedPrompt = prompts[type];
             if (!selectedPrompt) return res.status(404).json({ error: `Invalid prompt type: ${type}` });
 
+            // Define "Guide Flow" types that use the faster Flash model
+            const GUIDE_FLOW_TYPES = [
+                "dynamicGuide",
+                "dynamicGuideIterative",
+                "generateRoadmapSteps",
+                "generateChecklist",
+                "generatePillars",
+                "generateRoadmapBatch",
+                "finalGuide"
+            ];
+
+            const modelName = GUIDE_FLOW_TYPES.includes(type) ? "gemini-2.5-flash" : "gemini-2.5-pro";
+
             try {
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-2.5-pro",
+                    model: modelName,
                     systemInstruction: "You are an expert social media strategist who ONLY responds in the requested format."
                 });
 
@@ -1113,23 +1131,23 @@ exports.completeGuide = onCall(
                     };
                 }
 
-                // First-time completion: Award 10 credits
+                // First-time completion: Mark as completed but DO NOT award credits
                 const currentCredits = brandData.credits || 0;
-                const newCredits = currentCredits + 10;
+                // const newCredits = currentCredits + 10; // REMOVED: No credits for guide completion
 
                 transaction.update(brandRef, {
-                    credits: newCredits,
+                    // credits: newCredits,
                     guideCompleted: true,
                     guideCompletedAt: FieldValue.serverTimestamp()
                 });
 
-                console.log(`Awarded 10 credits to user ${uid} for guide completion. New balance: ${newCredits}`);
+                console.log(`Marked guide as completed for user ${uid}. No credits awarded.`);
 
                 return {
                     success: true,
-                    creditsAwarded: 10,
-                    newBalance: newCredits,
-                    message: "Congratulations! You've earned 10 credits for completing the guide!",
+                    creditsAwarded: 0,
+                    newBalance: currentCredits,
+                    message: "Guide completed successfully!",
                     alreadyCompleted: false
                 };
             });

@@ -328,6 +328,10 @@ function LayoutRouter({ user, userInfo, setUserInfo, isSidebarOpen, setIsSidebar
                     {/* Login Page */}
                     <Route path="/login" element={<Login />} />
 
+                    {/* Public Pages (Accessible when logged in) */}
+                    <Route path="/terms" element={<TermsOfService />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+
                     {/* Intro Page - Shown only once */}
                     <Route path="/intro" element={
                         <GuideRoute user={user}>

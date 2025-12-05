@@ -28,7 +28,7 @@ export const CREDIT_PACKAGES = [
         id: 'enterprise',
         name: 'Agency Scale',
         credits: 500,
-        price: 999,
+        price: 995,
         currency: 'INR',
         popular: false,
         savings: '60%'

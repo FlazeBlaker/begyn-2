@@ -15,6 +15,11 @@ export default function PaymentModal({ isOpen, onClose, onSuccess }) {
     };
 
     const handlePurchase = async (packageInfo) => {
+        // TEMPORARY: Disable payments until Razorpay approval
+        showToast("Payments will start in 24 hrs", "info");
+        return;
+
+        /* 
         setLoading(true);
         setSelectedPackage(packageInfo.id);
 
@@ -53,6 +58,7 @@ export default function PaymentModal({ isOpen, onClose, onSuccess }) {
             console.error('Error initiating payment:', error);
             showToast(`Error: ${error.message}`, 'error');
         }
+        */
     };
 
     if (!isOpen) return null;
