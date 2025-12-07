@@ -46,8 +46,9 @@ service cloud.firestore {
                     && request.resource.data.credits == resource.data.credits
                     && request.resource.data.creditsUsed == resource.data.creditsUsed);
       
-      // Deny create/delete (managed by backend)
-      allow create, delete: if false;
+      // Deny create (managed by backend), allow delete (for account closure)
+      allow create: if false;
+      allow delete: if isOwner(userId);
       
       // Allow access to subcollections (like payments) - Read Only for client
       match /{document=**} {

@@ -102,11 +102,12 @@ export default function Login() {
                 justifyContent: 'center',
                 padding: '80px',
                 position: 'relative',
-                background: 'radial-gradient(circle at bottom left, #1a1a2e 0%, #050507 100%)',
-                borderRight: '1px solid rgba(255,255,255,0.05)'
+                background: 'radial-gradient(circle at bottom left, rgba(124, 77, 255, 0.15) 0%, #050507 100%)',
+                borderRight: '1px solid var(--border-color)'
             }}>
                 {/* Background Effects */}
-                <div className="orb-glowing" style={{ top: '20%', left: '20%', opacity: 0.4 }}></div>
+                <div className="orb-glowing" style={{ top: '-10%', left: '-10%', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)' }}></div>
+                <div className="orb-glowing" style={{ bottom: '-10%', right: '-10%', background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)' }}></div>
                 <div className="scan-line" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}></div>
 
                 <div className="stagger-1" style={{ maxWidth: '600px', position: 'relative', zIndex: 10 }}>
@@ -114,13 +115,13 @@ export default function Login() {
                         display: 'inline-flex', alignItems: 'center', gap: '8px',
                         padding: '8px 16px', borderRadius: '99px',
                         background: 'rgba(124, 77, 255, 0.1)', border: '1px solid rgba(124, 77, 255, 0.2)',
-                        color: '#CE93D8', marginBottom: '32px', fontWeight: '600'
+                        color: 'var(--neon-pink)', marginBottom: '32px', fontWeight: '600'
                     }} className="reflection">
                         <Cpu size={16} /> AI-Powered Creation Engine
                     </div>
                     <h1 style={{
                         fontSize: '4rem', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px',
-                        color: '#fff'
+                        color: '#ffffff'
                     }}>
                         Turn Ideas into <br />
                         <span className="aurora-text">Viral Content.</span>
@@ -131,13 +132,13 @@ export default function Login() {
                     </p>
 
                     <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                        <div className="hover-lift-glow" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px 20px', borderRadius: '12px' }}>
+                        <div className="hover-lift-glow" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px 20px', borderRadius: '12px' }}>
                             <div className="status-dot"></div>
-                            <span style={{ color: '#e0e0e0', fontWeight: '500' }}>Free Forever Plan</span>
+                            <span style={{ color: '#ffffff', fontWeight: '500' }}>Free Forever Plan</span>
                         </div>
-                        <div className="hover-lift-glow" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '12px 20px', borderRadius: '12px' }}>
+                        <div className="hover-lift-glow" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px 20px', borderRadius: '12px' }}>
                             <Shield size={20} color="#22c55e" />
-                            <span style={{ color: '#e0e0e0', fontWeight: '500' }}>No Credit Card</span>
+                            <span style={{ color: '#ffffff', fontWeight: '500' }}>No Credit Card</span>
                         </div>
                     </div>
                 </div>
@@ -154,10 +155,13 @@ export default function Login() {
                 position: 'relative',
                 background: '#050507'
             }}>
-                <div style={{ width: '100%', maxWidth: '420px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                {/* Background Orb for Right Panel */}
+                <div className="orb-glowing" style={{ top: '10%', right: '10%', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(124, 77, 255, 0.2) 0%, transparent 70%)' }}></div>
+
+                <div className="glass-premium" style={{ width: '100%', maxWidth: '480px', padding: '40px', borderRadius: '24px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                         <img src="/logos/logo.png" alt="Logo" style={{ height: '48px', marginBottom: '24px' }} />
-                        <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '12px', color: '#fff' }}>Welcome Back</h2>
+                        <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '12px', color: '#ffffff' }}>Welcome Back</h2>
                         <p style={{ color: '#a0a0b0' }}>Sign in to continue to your dashboard</p>
                     </div>
 
@@ -196,7 +200,7 @@ export default function Login() {
 
                     {/* Temporary Developer Login */}
                     <div style={{ marginTop: '24px' }}>
-                        <p style={{ color: '#a0a0b0', fontSize: '0.8rem', marginBottom: '12px', textAlign: 'center' }}>Developer Login (Razorpay Test)</p>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '12px', textAlign: 'center' }}>Developer Login (Razorpay Test)</p>
                         <input
                             type="email"
                             placeholder="Email"
@@ -204,7 +208,7 @@ export default function Login() {
                             onChange={(e) => setEmail(e.target.value)}
                             style={{
                                 width: '100%', padding: '12px', marginBottom: '12px', borderRadius: '8px',
-                                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white'
+                                background: 'var(--bg-input)', border: '1px solid var(--border-color)', color: '#ffffff'
                             }}
                         />
                         <input
@@ -214,7 +218,7 @@ export default function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             style={{
                                 width: '100%', padding: '12px', marginBottom: '12px', borderRadius: '8px',
-                                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white'
+                                background: 'var(--bg-input)', border: '1px solid var(--border-color)', color: '#ffffff'
                             }}
                         />
                         <button
@@ -223,7 +227,7 @@ export default function Login() {
                             style={{
                                 width: '100%', padding: '12px', borderRadius: '8px',
                                 background: 'rgba(124, 77, 255, 0.1)', border: '1px solid rgba(124, 77, 255, 0.2)',
-                                color: '#CE93D8', cursor: 'pointer', fontWeight: '600',
+                                color: 'var(--neon-pink)', cursor: 'pointer', fontWeight: '600',
                                 transition: 'all 0.2s'
                             }}
                             onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(124, 77, 255, 0.2)'}
@@ -234,7 +238,7 @@ export default function Login() {
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '32px' }}>
-                        <p style={{ color: '#525252', fontSize: '0.85rem' }}>
+                        <p style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>
                             By continuing, you agree to our <Link to="/terms" className="text-glow-purple" style={{ color: '#a0a0b0' }}>Terms</Link> and <Link to="/privacy" className="text-glow-purple" style={{ color: '#a0a0b0' }}>Privacy Policy</Link>.
                         </p>
                     </div>

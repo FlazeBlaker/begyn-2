@@ -6,7 +6,7 @@ import {
     Zap, Layout, PenTool, Image as ImageIcon, CheckCircle,
     MessageSquare, ArrowRight, Shield, Globe, Star, LayoutDashboard, LogIn, Cpu, Video, Plus, Minus
 } from 'lucide-react';
-import AdUnit from '../components/AdUnit';
+
 
 // --- COMPONENTS ---
 
@@ -607,7 +607,7 @@ const FAQ = () => {
                 ))}
             </div>
 
-            <AdUnit slotId="1234567890" />
+
         </section>
     );
 };
@@ -638,7 +638,7 @@ export default function LandingPage() {
             <Navbar user={user} />
             <Hero user={user} />
             <Features />
-            <AdUnit slotId="1234567890" />
+
             <DeepDive />
             <FAQ />
             <Footer />
