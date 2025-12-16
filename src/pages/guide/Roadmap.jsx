@@ -32,18 +32,21 @@ export default function Roadmap({ steps = [] }) {
     // --- initialize nodes with positions and completed status ---
     const initializeNodes = useCallback((stepsArray, savedProgress = {}, savedNotes = {}) => {
         return stepsArray.map((step, i) => {
-            // Initialize action items with unique IDs and completion tracking
-            // Handle both old subNodes (objects) and new actionItems (strings)
+            // New atomic structure: actionItems are less relevant per step if the step ITSELF is atomic.
+            // But if we have sub-tasks (from old legacy or if AI hallucinates them), safely keep them.
             const rawItems = step.actionItems || step.subNodes || [];
             const actionItems = rawItems.map((item, j) => ({
                 id: `${step.id}-action-${j}`,
                 title: typeof item === 'string' ? item : item.title,
-                completed: savedProgress[step.id]?.subNodes?.[j] || false, // Reuse subNodes field in DB
+                completed: savedProgress[step.id]?.subNodes?.[j] || false,
             }));
 
             return {
                 id: step.id,
                 title: step.title,
+                action: step.action || step.description, // New
+                reason: step.reason, // New
+                completionCondition: step.completionCondition, // New
                 description: step.description,
                 detailedDescription: step.detailedDescription,
                 actionItems: actionItems,
@@ -592,19 +595,6 @@ export default function Roadmap({ steps = [] }) {
                                     selectedStep.title
                                 )}
                             </h3>
-                            {!selectedStep.isSubNode && selectedStep.timeEstimate && (
-                                <span style={{
-                                    display: "inline-block",
-                                    background: "rgba(124, 77, 255, 0.15)",
-                                    color: "#E1BEE7",
-                                    padding: "4px 10px",
-                                    borderRadius: "20px",
-                                    fontSize: "0.85rem",
-                                    fontWeight: 500
-                                }}>
-                                    ⏱️ {selectedStep.timeEstimate}
-                                </span>
-                            )}
                         </div>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <button
@@ -672,7 +662,39 @@ export default function Roadmap({ steps = [] }) {
                     </div>
 
                     <div style={{ color: "#e2e8f0", fontSize: "1rem", lineHeight: 1.7, marginBottom: 24 }}>
-                        {selectedStep.detailedDescription || selectedStep.description}
+                        {selectedStep.isSubNode ? selectedStep.detailedDescription : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                {/* ACTION BLOCK */}
+                                <div style={{ background: 'rgba(74, 222, 128, 0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #4ade80' }}>
+                                    <h4 style={{ margin: '0 0 8px 0', color: '#4ade80', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Action</h4>
+                                    <p style={{ margin: 0, fontSize: '1.2rem', fontWeight: 600, color: 'white' }}>{selectedStep.action}</p>
+                                </div>
+
+                                {/* WHY BLOCK */}
+                                {selectedStep.reason && (
+                                    <div>
+                                        <h4 style={{ margin: '0 0 4px 0', color: '#a0a0b0', fontSize: '0.85rem' }}>Why this matters:</h4>
+                                        <p style={{ margin: 0, color: '#e2e8f0' }}>{selectedStep.reason}</p>
+                                    </div>
+                                )}
+
+                                {/* CONDITION BLOCK */}
+                                {selectedStep.completionCondition && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px' }}>
+                                        <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }}></div>
+                                        </div>
+                                        <div>
+                                            <h4 style={{ margin: '0', color: '#a0a0b0', fontSize: '0.75rem' }}>Done when:</h4>
+                                            <p style={{ margin: 0, color: '#fff', fontSize: '0.95rem' }}>{selectedStep.completionCondition}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Fallback for legacy descriptions if no new fields */}
+                                {!selectedStep.action && <p>{selectedStep.description}</p>}
+                            </div>
+                        )}
                     </div>
 
                     {/* Action Items Checklist */}

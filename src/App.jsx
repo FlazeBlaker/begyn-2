@@ -134,12 +134,18 @@ const FullScreenLoader = () => (
 );
 
 // PrivateRoute: returns children if user authed AND verified
-function PrivateRoute({ user, children }) {
+function PrivateRoute({ user, children, onboarded }) {
     if (!user) return <Navigate to="/" replace />;
 
     // Security Fix: Block unverified users
     if (!user.emailVerified) {
         return <Navigate to="/login" state={{ needsVerification: true }} replace />;
+    }
+
+    // Strict Onboarding Check: If explicitly false, redirect to flow
+    // We use strict check because undefined/null might mean loading
+    if (onboarded === false) {
+        return <Navigate to="/flow" replace />;
     }
 
     return children;
@@ -368,6 +374,13 @@ function LayoutRouter({ user, userInfo, setUserInfo, isSidebarOpen, setIsSidebar
                                     }
                                 }} />
                             )}
+                        </GuideRoute>
+                    } />
+
+                    {/* Roadmap Page */}
+                    <Route path="/roadmap" element={
+                        <GuideRoute user={user}>
+                            <YourGuidePage />
                         </GuideRoute>
                     } />
 

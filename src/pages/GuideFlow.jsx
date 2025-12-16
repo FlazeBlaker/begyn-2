@@ -42,7 +42,7 @@ const Step1Niche = ({ data, updateData, next, usingBrandData }) => {
             return prev;
         });
     };
-    const isNextDisabled = !data.coreTopic || !data.targetAudience || !data.primaryGoal || (data.tone || []).length === 0;
+    const isNextDisabled = !data.coreTopic || !data.platform || !data.targetAudience || !data.primaryGoal || (data.tone || []).length === 0;
 
     return (
         <div className="form-container">
@@ -74,6 +74,19 @@ const Step1Niche = ({ data, updateData, next, usingBrandData }) => {
                         );
                     })}
                 </div>
+            </div>
+
+            <div className="input-group">
+                <label className="input-label">Platform *</label>
+                <select className="premium-input" name="platform" value={data.platform || ""} onChange={handleChange}>
+                    <option value="">Select Platform</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Twitter">Twitter/X</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                </select>
             </div>
 
             <div className="input-group">
@@ -161,43 +174,93 @@ const Step3AI = ({ formData, setFormData, loading, setLoading, next }) => {
     const startGeneration = async () => {
         setLoading(true);
         try {
-            const responseString = await generateContent({
-                type: "dynamicGuide",
+            // Prepare core data for the AI
+            const coreData = {
+                topic: formData.coreTopic,
+                platform: formData.platform,
+                targetAudience: formData.targetAudience,
+                primaryGoal: formData.primaryGoal,
+                tone: formData.tone ? formData.tone.join(', ') : '',
+                timeCommitment: formData.timeCommitment,
+                contentPreference: formData.contentPreference ? formData.contentPreference.join(', ') : ''
+            };
+
+            const response = await generateContent({
+                type: "generateNextQuestion",
                 payload: {
                     topic: formData.coreTopic,
-                    coreData: { niche: formData.coreTopic, tone: formData.tone, commitment: formData.timeCommitment },
-                    schema: AI_SCHEMA
+                    coreData: coreData
                 }
             });
 
-            let result;
+            // Parse response
+            let data;
             try {
-                result = (typeof responseString === 'object' && responseString !== null) ? responseString : JSON.parse(responseString);
+                if (typeof response === 'object' && response !== null && response.result) {
+                    // Sometimes result is stringified JSON
+                    data = typeof response.result === 'string' ? JSON.parse(response.result) : response.result;
+                } else if (typeof response === 'object') {
+                    data = response;
+                } else {
+                    // Try to extract JSON from text
+                    const jsonMatch = response.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        data = JSON.parse(jsonMatch[0]);
+                    } else {
+                        data = JSON.parse(response);
+                    }
+                }
             } catch (e) {
-                console.error("Failed to parse AI JSON:", e);
-                result = { questions: [] };
+                console.error("Parse error:", e, "Response:", response);
+                throw new Error("Failed to parse AI response");
             }
 
-            const dynamicQuestions = (result.questions && result.questions.length > 0) ? result.questions : [
-                { stepId: 4, question: "What is your main struggle?", keyName: "struggle", type: "text", required: true },
-                { stepId: 5, question: "Do you have a budget?", keyName: "budget", type: "radio", options: ["No", "Small", "Large"], required: true }
-            ];
+            const aiQuestions = data.questions || [];
+
+            if (aiQuestions.length === 0) {
+                throw new Error("No questions generated");
+            }
+
+            // Map to our step structure
+            const dynamicQuestions = aiQuestions.map((q, index) => ({
+                stepId: 4 + index,
+                question: q.text || q.question, // Handle both potential keys
+                keyName: `ai_q_${index}`,
+                type: "radio",
+                options: q.options || ["Other"],
+                required: true
+            }));
 
             setFormData(prev => ({ ...prev, dynamicSteps: dynamicQuestions, totalDynamicSteps: dynamicQuestions.length }));
             setLoading(false);
             next();
+
         } catch (error) {
             console.error("AI Generation Error:", error);
             setLoading(false);
-            setFormData(prev => ({
-                ...prev,
-                dynamicSteps: [
-                    { stepId: 4, question: "What visual style should your PFP be?", keyName: "pfpStyle", type: "radio", options: ["Mascot", "Abstract Logo", "Stylized Text"], required: true },
-                    { stepId: 5, question: "What is your primary Call-to-Action (CTA)?", keyName: "mainCTA", type: "radio", options: ["Link in Bio", "Subscribe Now", "Visit My Shop"], required: true },
-                    { stepId: 6, question: "What is your budget for creation tools?", keyName: "toolBudget", type: "radio", options: ["Free Tools Only", "Freemium/Low Budget", "Paid/Pro Tools"], required: true }
-                ],
-                totalDynamicSteps: 3
-            }));
+
+            // Fallback questions if AI fails
+            const platform = formData.platform || 'social media';
+            const topic = formData.coreTopic || 'content';
+            const dynamicQuestions = [
+                {
+                    stepId: 4,
+                    question: `What style of ${topic} content will you create?`,
+                    keyName: "contentStyle",
+                    type: "radio",
+                    options: ["Educational", "Entertaining", "Inspirational", "Mix"],
+                    required: true
+                },
+                {
+                    stepId: 5,
+                    question: "What is your main constraint?",
+                    keyName: "constraint",
+                    type: "radio",
+                    options: ["Time", "Budget", "Skills", "None"],
+                    required: true
+                }
+            ];
+            setFormData(prev => ({ ...prev, dynamicSteps: dynamicQuestions, totalDynamicSteps: dynamicQuestions.length }));
             next();
         }
     };
@@ -541,35 +604,55 @@ export default function GuideFlow({ setOnboardedStatus }) {
         };
 
         try {
-            const totalSteps = 60;
-            const batchSize = 5;
+            const totalSteps = 12; // Reduced from 60 to prevent timeouts
+            const batchSize = 4;
             const batches = Math.ceil(totalSteps / batchSize);
             let allSteps = [];
 
             for (let i = 0; i < batches; i++) {
                 const startStep = i * batchSize + 1;
                 const endStep = startStep + batchSize - 1;
-                setLoadingProgress(`Orchestrating steps ${startStep}-${endStep}...`);
+                setLoadingProgress(`Orchestrating steps ${startStep}-${endStep} of ${totalSteps}...`);
 
+                // Context: Pass the last 3 steps to maintain continuity
+                const previousStepsContext = allSteps.slice(-3).map(s => ({ title: s.title, description: s.description }));
 
-                // Context: Pass the last 5 steps to maintain continuity
-                const previousStepsContext = allSteps.slice(-5).map(s => ({ title: s.title, description: s.description }));
+                try {
+                    const batchResponse = await generateContent({
+                        type: "generateRoadmapBatch",
+                        payload: {
+                            topic: formData.coreTopic || 'General Content Strategy',
+                            platform: formData.platform || 'General', // Added platform
+                            formData: formData,
+                            dynamicAnswers: dynamicAnswers,
+                            startStep: startStep,
+                            endStep: Math.min(endStep, totalSteps),
+                            numSteps: batchSize,
+                            previousSteps: previousStepsContext
+                        }
+                    });
 
-                const batchResponse = await generateContent({
-                    type: "generateRoadmapBatch",
-                    payload: {
-                        topic: formData.coreTopic || 'General Content Strategy',
-                        formData: formData,
-                        dynamicAnswers: dynamicAnswers,
-                        startStep: startStep,
-                        endStep: endStep,
-                        numSteps: batchSize,
-                        previousSteps: previousStepsContext // NEW: Pass context
+                    let batchData = sanitizeAndParse(batchResponse);
+                    if (batchData.steps && Array.isArray(batchData.steps)) {
+                        allSteps = [...allSteps, ...batchData.steps];
+                    } else if (batchData.roadmapSteps && Array.isArray(batchData.roadmapSteps)) {
+                        // Handle potential key mismatch
+                        allSteps = [...allSteps, ...batchData.roadmapSteps];
+                    } else {
+                        console.warn(`Batch ${i + 1} returned no steps:`, batchData);
                     }
-                });
-                let batchData;
-                try { batchData = sanitizeAndParse(batchResponse); } catch (e) { continue; }
-                if (batchData.steps && Array.isArray(batchData.steps)) allSteps = [...allSteps, ...batchData.steps];
+                } catch (batchError) {
+                    console.error(`Batch ${i + 1} Failed:`, batchError);
+                    // Fallback step to prevent 0/0
+                    allSteps.push({
+                        id: `temp-${startStep}`,
+                        title: `Explore Content Strategy (Step ${startStep})`,
+                        description: "This step could not be generated. Please review your strategy manually.",
+                        phase: 'Recovery',
+                        action: 'Review',
+                        reason: 'Generation fallback'
+                    });
+                }
             }
 
             finalGuideData.roadmapSteps = allSteps.map((step, index) => ({
@@ -593,13 +676,13 @@ export default function GuideFlow({ setOnboardedStatus }) {
         const mergedBrandData = { ...brandSetupData, industry: formData.coreTopic || brandSetupData?.industry, audience: formData.targetAudience || brandSetupData?.audience, tone: Array.isArray(formData.tone) ? formData.tone.join(', ') : (formData.tone || brandSetupData?.tone) };
         await setDoc(brandRef, { ...mergedBrandData, onboarded: true, brandData: { ...formData, aiGenerated: finalGuideData }, roadmapProgress: {} }, { merge: true });
 
-        try {
-            const { getFunctions, httpsCallable } = await import('firebase/functions');
-            const funcs = getFunctions();
-            const completeGuideFn = httpsCallable(funcs, 'completeGuide');
-            await completeGuideFn();
-            // Alert removed as no credits are awarded anymore
-        } catch (creditError) { console.error("Failed to award completion credits:", creditError); }
+        // Legacy credit award removed (credits given on signup now)
+        // try {
+        //     const { getFunctions, httpsCallable } = await import('firebase/functions');
+        //     const funcs = getFunctions();
+        //     const completeGuideFn = httpsCallable(funcs, 'completeGuide');
+        //     await completeGuideFn();
+        // } catch (creditError) { console.error("Failed to award completion credits:", creditError); }
 
         if (setOnboardedStatus) setOnboardedStatus(true);
         setLoading(false);

@@ -12,7 +12,8 @@ import {
     where,
     orderBy,
     serverTimestamp,
-    updateDoc
+    updateDoc,
+    deleteField
 } from "firebase/firestore";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -37,10 +38,14 @@ const functions = getFunctions(app);
 const storage = getStorage(app);
 
 // Connect to emulator if on localhost
-// if (window.location.hostname === "localhost") {
-//     connectFunctionsEmulator(functions, "localhost", 5001);
-//     console.log("Connected to Functions Emulator");
-// }
+// Connect to emulator if on localhost
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    connectFunctionsEmulator(functions, "127.0.0.1", 5001);
+    // Optional: Connect other emulators if you are running them
+    // connectFirestoreEmulator(db, '127.0.0.1', 8080);
+    // connectAuthEmulator(auth, "http://127.0.0.1:9099");
+    console.log("Enabled: Connected to Functions Emulator at 5001");
+}
 
 // --- Helper: Sanitize Content for History ---
 const sanitizeContentForHistory = (content) => {
@@ -159,6 +164,7 @@ export {
     orderBy,
     serverTimestamp,
     updateDoc,
+    deleteField,
 
     // Export exports for Google Sign-In Pop-up flow:
     GoogleAuthProvider,
