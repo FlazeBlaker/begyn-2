@@ -1,10 +1,12 @@
 ﻿
+
 // functions/index.js
 const { onRequest } = require("firebase-functions/v2/https");
 require("dotenv").config();
 const admin = require("firebase-admin");
 const { FieldValue } = require("firebase-admin/firestore");
 const cors = require('cors')({ origin: true });
+const { getToolsByNames } = require("./toolDatabase");
 
 admin.initializeApp();
 const db = admin.firestore();

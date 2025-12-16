@@ -2,6 +2,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { auth, db, doc, setDoc, getDoc } from "../services/firebase";
 import { generateContent } from "../services/aiApi";
+import { convertToolsToResources } from "../constants/toolDatabase";
 import "../styles/GuideFlowStyles.css";
 
 // --- PHASE 1 OPTIONS ---
@@ -685,9 +686,28 @@ export default function GuideFlow({ setOnboardedStatus }) {
                 }
             }
 
-            finalGuideData.roadmapSteps = allSteps.map((step, index) => ({
-                id: `step-${index + 1}`, title: step.title, description: step.description, detailedDescription: step.detailedDescription || step.description, phase: step.phase, timeEstimate: step.timeEstimate || "30 mins", suggestions: step.suggestions || [], resources: step.resources || [], actionItems: step.actionItems || [], generatorLink: step.generatorLink || null, type: 'ai-generated'
-            }));
+
+            finalGuideData.roadmapSteps = allSteps.map((step, index) => {
+                // Convert recommendedTools (array of strings) to resources (array of {name, url})
+                const resources = step.resources || convertToolsToResources(step.recommendedTools || []);
+
+                return {
+                    id: `step-${index + 1}`,
+                    title: step.title,
+                    description: step.description,
+                    detailedDescription: step.detailedDescription || step.description,
+                    phase: step.phase,
+                    timeEstimate: step.timeEstimate || "30 mins",
+                    suggestions: step.suggestions || [],
+                    resources: resources, // Now includes clickable download links
+                    actionItems: step.actionItems || [],
+                    generatorLink: step.generatorLink || null,
+                    type: 'ai-generated',
+                    action: step.action,
+                    reason: step.reason,
+                    completionCondition: step.completionCondition
+                };
+            });
 
             const pillarsResponse = await generateContent({ type: "generatePillars", payload: { formData: formData } });
             const pillarsData = sanitizeAndParse(pillarsResponse);
