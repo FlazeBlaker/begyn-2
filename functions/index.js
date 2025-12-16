@@ -332,8 +332,15 @@ exports.generateContent = onRequest(
                 const { type, payload } = body || {};
 
                 // Extract variables from payload
+                // FIX: Check BOTH payload root (from Generator Hub) and coreData (from Guide Flow)
                 const { topic, image, options: rawOptions, videoLength, history, startStep, endStep, previousSteps, platform } = payload || {};
-                const { tone, timeCommitment, contentPreference, targetAudience, primaryGoal } = payload?.coreData || {};
+
+                const coreData = payload?.coreData || {};
+                const tone = coreData.tone || payload?.tone || "Professional";
+                const timeCommitment = coreData.timeCommitment || payload?.timeCommitment;
+                const contentPreference = coreData.contentPreference || payload?.contentPreference;
+                const targetAudience = coreData.targetAudience || payload?.targetAudience || "General Audience";
+                const primaryGoal = coreData.primaryGoal || payload?.primaryGoal;
 
                 // Fix: Frontend sends options at payload root, not nested.
                 // We construct 'options' from payload root if 'rawOptions' is missing.
@@ -348,6 +355,18 @@ exports.generateContent = onRequest(
                     videoLength: payload?.videoLength || videoLength,
                     numVariations: payload?.numVariations
                 };
+
+                // --- ADVANCED SETTINGS INSTRUCTIONS ---
+                const includeHashtags = options.includeHashtags !== false; // Default true
+                const includeEmojis = options.includeEmojis !== false;     // Default true
+
+                const hashtagInstruction = includeHashtags
+                    ? "Include relevant, high-traffic hashtags at the end."
+                    : "STRICTLY NO HASHTAGS.";
+
+                const emojiInstruction = includeEmojis
+                    ? "Use emojis to make the content engaging and visual."
+                    : "STRICTLY NO EMOJIS.";
 
 
 
@@ -590,6 +609,9 @@ Make ideas: Specific, actionable, trending-aware.`,
                     caption: `Write ${payload?.numOutputs || 3} engaging captions for: ${topic}
 Style: ${tone || 'engaging'}
 Platform: ${platform}
+Target Audience: ${targetAudience}
+${hashtagInstruction}
+${emojiInstruction}
 
 OUTPUT JSON:
 {
@@ -601,6 +623,9 @@ OUTPUT JSON:
 
                     tweet: `Write ${payload?.numOutputs || 5} viral tweets about: ${topic}
 Style: ${tone}
+Target Audience: ${targetAudience}
+${hashtagInstruction}
+${emojiInstruction}
 
 OUTPUT JSON format must match exactly:
 {
@@ -611,6 +636,9 @@ OUTPUT JSON format must match exactly:
 }`,
 
                     videoScript: `Write a ${payload?.videoLength || '60s'} video script for ${platform} about: ${topic}
+Tone: ${tone}
+Target Audience: ${targetAudience}
+${emojiInstruction}
 
 Structure the response into 3 distinct sections: Intro (Hook), Main Content, and Outro (CTA).
 
