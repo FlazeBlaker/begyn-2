@@ -568,55 +568,58 @@ OUTPUT JSON ONLY:
   "completionCondition": "string",
   "recommendedTools": ["string", "string"]
 }] }`,
-                    idea: `Generate ${payload?.numIdeas || 10} viral content ideas for ${topic}.
+                    idea: `Generate ${payload?.numOutputs || 10} viral content ideas for ${topic}.
 Platform: ${platform || 'general social media'}
+Target Audience: ${targetAudience}
+Tone: ${tone}
 
-For each idea, provide:
-- title: Catchy, attention-grabbing title
-- description: 2-3 sentence explanation of the content
-- length: Estimated video/content length (e.g., "60 seconds", "5 minutes", "10 minutes")
+OUTPUT JSON format must match exactly:
+{
+  "contentIdeas": [
+    {
+      "title": "Catchy Title",
+      "length": "Estimated Length (e.g. 60s)",
+      "idea": "One sentence summary",
+      "explanation": "Detailed explanation or bullet points"
+    }
+  ]
+}
 
-Make ideas:
-- Specific and actionable
-- Platform-appropriate
-- Trending-aware
-- Easy to execute
+Make ideas: Specific, actionable, trending-aware.`,
 
-OUTPUT JSON:
-{ "ideas": [
-  {
-    "title": "Idea title here",
-    "description": "Detailed explanation of what this content would be about",
-    "length": "5 minutes"
-  }
-] }`,
                     caption: `Write ${payload?.numOutputs || 3} engaging captions for: ${topic}
-
-Make them:
-- Hook in first 5 words
-- Value-driven
-- Include call-to-action
+Style: ${tone || 'engaging'}
+Platform: ${platform}
 
 OUTPUT JSON:
-{ "captions": ["caption 1", "caption 2", ...] }`,
+{
+  "captions": [
+    "Caption 1 text...",
+    "Caption 2 text..."
+  ]
+}`,
+
                     tweet: `Write ${payload?.numOutputs || 5} viral tweets about: ${topic}
+Style: ${tone}
 
-Make them:
-- Attention-grabbing
-- Value-packed
-- Shareable
+OUTPUT JSON format must match exactly:
+{
+  "tweets": [
+    { "text": "Tweet 1 content..." },
+    { "text": "Tweet 2 content..." }
+  ]
+}`,
 
-OUTPUT JSON:
-{ "tweets": ["tweet 1", "tweet 2", ...] }`,
-                    videoScript: `Write a video script for ${platform || 'social media'} about: ${topic}
+                    videoScript: `Write a ${payload?.videoLength || '60s'} video script for ${platform} about: ${topic}
 
-Include:
-- Hook (first 3 seconds)
-- Main content
-- Call-to-action
+Structure the response into 3 distinct sections: Intro (Hook), Main Content, and Outro (CTA).
 
-OUTPUT JSON:
-{ "script": "full script here" }`
+OUTPUT JSON format must match exactly:
+{
+  "intro": ["Hook line 1", "Hook line 2"],
+  "mainContent": ["Point 1", "Point 2", "Point 3"],
+  "outro": ["Call to action", "Closing"]
+}`
                 };
 
                 // --- TEXT GENERATION ---

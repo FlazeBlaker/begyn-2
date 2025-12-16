@@ -667,6 +667,12 @@ const Generators = () => {
 
 
 
+                                // Handle captions wrapper
+                                const captionsArray = parsed.captions;
+                                if (captionsArray && Array.isArray(captionsArray)) {
+                                    parsed = captionsArray;
+                                }
+
                                 // Handle contentIdeas wrapper (backend JSON - handle case variations)
                                 const ideasArray = parsed.contentIdeas || parsed.contentideas;
                                 if (ideasArray && Array.isArray(ideasArray)) {
