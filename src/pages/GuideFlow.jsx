@@ -604,7 +604,36 @@ export default function GuideFlow({ setOnboardedStatus }) {
         };
 
         try {
-            const totalSteps = 12; // Reduced from 60 to prevent timeouts
+            // Dynamic step calculation based on complexity
+            const calculateStepCount = () => {
+                let baseSteps = 30; // Minimum for any creator
+
+                // Add steps based on content variety
+                const contentTypes = formData.contentPreference || [];
+                baseSteps += contentTypes.length * 5; // +5 per content type
+
+                // Add steps for time commitment (more time = more advanced strategies)
+                const timeHours = parseInt(formData.timeCommitment) || 0;
+                if (timeHours > 20) baseSteps += 10; // Heavy commitment
+                else if (timeHours > 10) baseSteps += 5; // Medium commitment
+
+                // Add steps for cross-platform (if they mention multiple platforms in their answers)
+                const dynamicAnswers = formData.dynamicSteps || [];
+                const mentionsMultiplePlatforms = dynamicAnswers.some(step => {
+                    const answer = formData[step.keyName] || '';
+                    return answer.toLowerCase().includes('multiple') ||
+                        answer.toLowerCase().includes('cross-platform') ||
+                        answer.toLowerCase().includes('repurpose');
+                });
+                if (mentionsMultiplePlatforms) baseSteps += 10;
+
+                // Cap between 30-60
+                return Math.min(60, Math.max(30, baseSteps));
+            };
+
+            const totalSteps = calculateStepCount();
+            console.log(`Generating ${totalSteps} steps based on content complexity`);
+
             const batchSize = 4;
             const batches = Math.ceil(totalSteps / batchSize);
             let allSteps = [];
@@ -622,13 +651,14 @@ export default function GuideFlow({ setOnboardedStatus }) {
                         type: "generateRoadmapBatch",
                         payload: {
                             topic: formData.coreTopic || 'General Content Strategy',
-                            platform: formData.platform || 'General', // Added platform
+                            platform: formData.platform || 'General',
                             formData: formData,
                             dynamicAnswers: dynamicAnswers,
                             startStep: startStep,
                             endStep: Math.min(endStep, totalSteps),
                             numSteps: batchSize,
-                            previousSteps: previousStepsContext
+                            previousSteps: previousStepsContext,
+                            totalSteps: totalSteps // Pass total steps for phase calculation
                         }
                     });
 
@@ -672,9 +702,38 @@ export default function GuideFlow({ setOnboardedStatus }) {
             finalGuideData.contentPillars = ["Education"];
         }
 
+        // Helper function to remove undefined values (Firestore doesn't support undefined)
+        const removeUndefined = (obj) => {
+            if (obj === null || obj === undefined) return null;
+            if (Array.isArray(obj)) return obj.map(removeUndefined);
+            if (typeof obj !== 'object') return obj;
+
+            const cleaned = {};
+            for (const key in obj) {
+                if (obj[key] !== undefined) {
+                    cleaned[key] = removeUndefined(obj[key]);
+                }
+            }
+            return cleaned;
+        };
+
         const brandRef = doc(db, "brands", uid);
-        const mergedBrandData = { ...brandSetupData, industry: formData.coreTopic || brandSetupData?.industry, audience: formData.targetAudience || brandSetupData?.audience, tone: Array.isArray(formData.tone) ? formData.tone.join(', ') : (formData.tone || brandSetupData?.tone) };
-        await setDoc(brandRef, { ...mergedBrandData, onboarded: true, brandData: { ...formData, aiGenerated: finalGuideData }, roadmapProgress: {} }, { merge: true });
+        const mergedBrandData = {
+            ...brandSetupData,
+            industry: formData.coreTopic || brandSetupData?.industry || null,
+            audience: formData.targetAudience || brandSetupData?.audience || null,
+            tone: Array.isArray(formData.tone) ? formData.tone.join(', ') : (formData.tone || brandSetupData?.tone || null)
+        };
+
+        // Clean the data before saving to Firestore
+        const cleanedData = removeUndefined({
+            ...mergedBrandData,
+            onboarded: true,
+            brandData: { ...formData, aiGenerated: finalGuideData },
+            roadmapProgress: {}
+        });
+
+        await setDoc(brandRef, cleanedData, { merge: true });
 
         // Legacy credit award removed (credits given on signup now)
         // try {

@@ -453,65 +453,109 @@ OUTPUT FORMAT (JSON ONLY):
   ],
   "isFinalized": false
 }`,
-                    generateRoadmapBatch: `You are a Roadmap Architect creating a detailed execution guide.
+                    generateRoadmapBatch: `You are a Roadmap Architect creating a comprehensive execution guide for content creators.
+
 Topic: ${topic}
+Platform: ${platform || "general"}
 Batch: Steps ${startStep} to ${endStep}
+Total Steps in Roadmap: ${payload?.totalSteps || 60}
 Context (Previous Steps): ${JSON.stringify(previousSteps || [])}
 
+🚨 ANTI-REPETITION RULE (CRITICAL):
+**YOU MUST NEVER REPEAT THE SAME TASK TYPE MORE THAN ONCE IN THIS BATCH.**
+- Each step in this batch must be FUNDAMENTALLY DIFFERENT
+- Reviewed previous steps to avoid duplication
+- If you already covered "Record video", do NOT create another recording step
+- If you already covered "Edit video", do NOT create another editing step
+- If you already covered "Create thumbnail", do NOT create another thumbnail step
+- PROGRESSION is key: move to the NEXT phase activity
 
-CRITICAL RULES - LOGICAL ORDERING:
-1. **Respect Real Prerequisites**: Don't suggest steps that require conditions not yet met
-   - YouTube monetization requires 1k subs + 4k watch hours OR 10M shorts views → Only include this LATE in roadmap
-   - Sponsorships require audience → Only after building following
-   - Advanced features require basic setup first
-2. **Include Growth Milestones**: When a step requires reaching a goal, add a preceding step like:
-   - "Post 3 times per week following your content calendar until you reach 1,000 subscribers"
-   - "Continue creating Shorts daily until you hit 10 million views"
-3. **Progressive Difficulty**: Early steps should be immediately actionable, later steps can be more advanced
-4. **Platform-Specific Knowledge**: Know real platform requirements
-   - YouTube Partner Program: 1k subs + 4k hours OR 10M Shorts views
-   - Instagram verification: Need significant following + engagement
-   - TikTok Creator Fund: 10k followers + 100k views in 30 days
+🎯 ROADMAP STRUCTURE (DYNAMIC ${payload?.totalSteps || 60} STEPS):
 
-RULES - STEP QUALITY:
-- Generate exactly ${endStep - startStep + 1} steps for this batch
-- Each step must be specific, actionable, and concrete
-- Platform: ${platform || "generic"}
-- Focus on UI-level actions (what the user actually does in the app/platform)
+**PHASE 1: FOUNDATION (0-15%)**
+Steps: Account setup → Profile bio → Channel art → Workspace setup → Software installation
 
+**PHASE 2: CONTENT CREATION (15-40%)**
+Steps: First recording → First edit → First thumbnail → First upload → SEO optimization → Publish second video → Review analytics
 
-STEP REQUIREMENTS:
-- title: An IMPERATIVE ACTION statement that includes WHERE and WHAT
-  Format: "[Verb] [WHERE] and [WHAT specifically]"
-  Examples: "Go to YouTube Studio and upload a video", "Click the Analytics tab and review your engagement metrics"
-  FORBIDDEN standalone verbs: Configure, Develop, Set up, Build, Create, Establish, Implement (unless combined with specific location and action)
-- description: 2-3 sentences explaining what to do and why it matters
-- action: Single verb only (e.g., "Navigate", "Click", "Type", "Upload", "Select")
-- reason: Why this step is important for their goal
-- completionCondition: How they know this step is complete
-- recommendedTools: Array of 2-3 REAL, SPECIFIC tools/platforms that are industry-standard for this step
-  Use your knowledge of what tools content creators actually use for this task
-  Examples: For thumbnails → ["Canva", "Photopea"], For SEO → ["TubeBuddy", "VidIQ"], For scheduling → ["Buffer", "Later"]
-  FORBIDDEN: Generic tools like "ChatGPT", "AI tool", "design software", "editing app"
-  Must be REAL brand names/platforms that actually exist and are widely used
+**PHASE 3: CONSISTENCY & QUALITY (40-60%)**
+Steps: Content calendar → Batch recording → Advanced editing → A/B testing → Viewer retention analysis → Improve based on data
 
-TITLE EXAMPLES:
-✅ GOOD: "Go to YouTube and click 'Create Channel'"
-✅ GOOD: "Upload a profile picture and channel banner"
-✅ GOOD: "Click the Settings icon and select your channel category"
-✅ GOOD: "Type your channel description in the About section"
-✅ GOOD: "Navigate to Creator Studio and enable monetization"
-❌ BAD: "Configure your channel" (WHERE? WHAT specifically?)
-❌ BAD: "Develop your content strategy" (too vague, no specific action)
-❌ BAD: "Set up your profile" (WHERE? WHAT specifically?)
-❌ BAD: "Create content" (WHAT kind? WHERE?)
+**PHASE 4: COMMUNITY BUILDING (60-75%)**
+Steps: Reply to comments → Community posts → Collaborations → Discord setup → Audience surveys → Q&A videos
+
+**PHASE 5: GROWTH & SCALING (75-90%)**
+Steps: Repurpose to Shorts → Cross-post to Instagram → Trending topic videos → SEO deep dive → Virality tactics
+
+**PHASE 6: MONETIZATION (90-100%)**
+Steps: Apply for monetization → Enable ads → Sponsorship email templates → Affiliate links → Merch/products
+
+⚠️ PHASE-SPECIFIC RULES:
+
+**If you're in FOUNDATION (0-15%):**
+Focus ONLY on: Creating accounts, setting up profiles, installing software, organizing workspace
+Examples: "Create YouTube channel", "Write channel description", "Download OBS Studio", "Set up recording area"
+
+**If you're in CONTENT CREATION (15-40%):**
+Cover the FULL content workflow ONCE, then move to optimization:
+1. Record first video (do this ONCE)
+2. Edit first video (do this ONCE)
+3. Create first thumbnail (do this ONCE)
+4. Upload and optimize (do this ONCE)
+5. After first video is published, focus on: Second video planning, SEO research, description templates, tag strategy
+DO NOT repeat "record video", "edit video", "create thumbnail" - you already did that
+
+**If you're in CONSISTENCY (40-60%):**
+Focus on: Schedule creation, batch workflows, analytics review, quality improvement
+Examples: "Create a 30-day content calendar", "Analyze first 10 videos performance", "Identify top-performing content types"
+
+**If you're in COMMUNITY (60-75%):**
+Focus on: Engagement, interactions, building relationships
+Examples: "Reply to all comments within 24 hours", "Create a Discord server", "Start a weekly community poll"
+
+**If you're in GROWTH (75-90%):**
+Focus on: Scaling, repurposing, cross-platform
+Examples: "Repurpose YouTube video into 5 TikToks", "Identify viral trends in your niche", "Guest appear on 3 podcasts"
+
+**If you're in MONETIZATION (90-100%):**
+Focus on: Revenue streams, partnerships, products
+Examples: "Apply for YouTube Partner Program", "Create sponsorship rate card", "Launch digital product"
+
+🛠️ TOOL EXAMPLES BY TASK:
+- Account Setup: YouTube Studio, Google Account
+- Recording: OBS Studio, Streamlabs, Nvidia ShadowPlay
+- Editing: DaVinci Resolve, CapCut, Adobe Premiere
+- Thumbnails: Canva, Photopea, Photoshop
+- SEO: TubeBuddy, VidIQ, RapidTags
+- Analytics: YouTube Studio, VidIQ
+- Scheduling: Buffer, Hootsuite, Later
+- Community: Discord, Telegram, Community Tab
+- Monetization: Gumroad, Stan Store, Patreon
+
+⚡ YOUR CURRENT BATCH (Steps ${startStep}-${endStep} of ${payload?.totalSteps || 60}):
+Current progress: ${Math.round((startStep / (payload?.totalSteps || 60)) * 100)}% complete
+
+Determine your PHASE:
+- 0-15%: FOUNDATION - Setup tasks only
+- 15-40%: CONTENT CREATION - First video workflow + optimization (NO LOOPS)
+- 40-60%: CONSISTENCY - Calendars, analytics, improvement
+- 60-75%: COMMUNITY - Engagement, Discord, collaborations
+- 75-90%: GROWTH - Repurposing, trends, cross-platform
+- 90-100%: MONETIZATION - Revenue streams, partnerships
+
+🔍 BEFORE GENERATING:
+1. Check previous steps to see what's already covered
+2. Identify which phase you're in based on step numbers
+3. Generate steps appropriate for THAT PHASE ONLY
+4. Ensure NO step title is similar to previous steps
+5. Each step must be a NEW, UNIQUE activity
 
 OUTPUT JSON ONLY:
 { "roadmapSteps": [{ 
-  "title": "string", 
-  "description": "string", 
-  "action": "string", 
-  "reason": "string", 
+  "title": "string",
+  "description": "string",
+  "action": "string",
+  "reason": "string",
   "completionCondition": "string",
   "recommendedTools": ["string", "string"]
 }] }`
