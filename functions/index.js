@@ -337,6 +337,7 @@ exports.generateContent = onRequest(
 
                 const coreData = payload?.coreData || {};
                 const tone = coreData.tone || payload?.tone || "Professional";
+                const niche = coreData.niche || payload?.niche || ""; // Extracted Niche
                 const timeCommitment = coreData.timeCommitment || payload?.timeCommitment;
                 const contentPreference = coreData.contentPreference || payload?.contentPreference;
                 const targetAudience = coreData.targetAudience || payload?.targetAudience || "General Audience";
@@ -589,6 +590,7 @@ OUTPUT JSON ONLY:
 }] }`,
                     idea: `Generate ${payload?.numOutputs || 10} viral content ideas for ${topic}.
 Platform: ${platform || 'general social media'}
+Niche/Context: ${niche}
 Target Audience: ${targetAudience}
 Tone: ${tone}
 
@@ -609,6 +611,7 @@ Make ideas: Specific, actionable, trending-aware.`,
                     caption: `Write ${payload?.numOutputs || 3} engaging captions for: ${topic}
 Style: ${tone || 'engaging'}
 Platform: ${platform}
+Niche/Context: ${niche}
 Target Audience: ${targetAudience}
 ${hashtagInstruction}
 ${emojiInstruction}
@@ -623,6 +626,7 @@ OUTPUT JSON:
 
                     tweet: `Write ${payload?.numOutputs || 5} viral tweets about: ${topic}
 Style: ${tone}
+Niche/Context: ${niche}
 Target Audience: ${targetAudience}
 ${hashtagInstruction}
 ${emojiInstruction}
@@ -637,6 +641,7 @@ OUTPUT JSON format must match exactly:
 
                     videoScript: `Write a ${payload?.videoLength || '60s'} video script for ${platform} about: ${topic}
 Tone: ${tone}
+Niche/Context: ${niche}
 Target Audience: ${targetAudience}
 ${emojiInstruction}
 
