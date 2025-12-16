@@ -600,13 +600,14 @@ OUTPUT JSON format must match exactly:
     {
       "title": "Catchy Title",
       "length": "Estimated Length (e.g. 60s)",
-      "idea": "One sentence summary",
-      "explanation": "Detailed explanation or bullet points"
+      "idea": "One sentence summary (NO newlines)",
+      "explanation": ["Point 1", "Point 2", "Point 3"]
     }
   ]
 }
 
-Make ideas: Specific, actionable, trending-aware.`,
+Make ideas: Specific, actionable, trending-aware.
+CRITICAL: Returns strictly valid JSON. NO unescaped newlines in strings. Use arrays for lists.`,
 
                     caption: `Write ${payload?.numOutputs || 3} engaging captions for: ${topic}
 Style: ${tone || 'engaging'}
@@ -634,10 +635,11 @@ ${emojiInstruction}
 OUTPUT JSON format must match exactly:
 {
   "tweets": [
-    { "text": "Tweet 1 content..." },
+    { "text": "Tweet 1 content... (Use \\n for newlines, DO NOT use literal newlines)" },
     { "text": "Tweet 2 content..." }
   ]
-}`,
+}
+CRITICAL: Strictly valid JSON. NO unescaped newlines.`,
 
                     videoScript: `Write a ${payload?.videoLength || '60s'} video script for ${platform} about: ${topic}
 Tone: ${tone}
@@ -652,7 +654,8 @@ OUTPUT JSON format must match exactly:
   "intro": ["Hook line 1", "Hook line 2"],
   "mainContent": ["Point 1", "Point 2", "Point 3"],
   "outro": ["Call to action", "Closing"]
-}`
+}
+CRITICAL: Strictly valid JSON. NO unescaped newlines.`
                 };
 
                 // --- TEXT GENERATION ---

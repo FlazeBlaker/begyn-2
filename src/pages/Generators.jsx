@@ -7,7 +7,7 @@ import GeneratorLayout, {
     SelectionButton
 } from "../components/GeneratorLayout";
 import ImageUpload from "../components/ImageUpload";
-import { auth, logUserAction, db, uploadImageToStorage, doc, getDoc } from "../services/firebase";
+import { auth, logUserAction, db, uploadImageToStorage, doc, getDoc, onSnapshot } from "../services/firebase";
 import { generateContent } from "../services/aiApi";
 
 // --- CONSTANTS ---
@@ -176,22 +176,37 @@ const Generators = () => {
         }
     }, [searchParams]);
 
-    // Fetch Brand Data
+    // Fetch Brand Data (Real-time & Auth-aware)
     useEffect(() => {
-        const fetchBrandData = async () => {
-            const user = auth.currentUser;
-            if (!user) return;
+        let unsubscribeBrand = null; // Store inner subscription
 
-            try {
-                const brandDoc = await getDoc(doc(db, "brands", user.uid));
-                if (brandDoc.exists()) {
-                    setBrandData(brandDoc.data().brandData);
-                }
-            } catch (error) {
-                console.error("Error fetching brand data:", error);
+        const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+            // Clean up previous brand listener if exists (e.g. user switch)
+            if (unsubscribeBrand) {
+                unsubscribeBrand();
+                unsubscribeBrand = null;
             }
+
+            if (user) {
+                // Subscribe to real-time updates for brand data
+                unsubscribeBrand = onSnapshot(doc(db, "brands", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        // Store the FULL document data to access root fields (industry, tone) AND nested guide data
+                        setBrandData(docSnap.data());
+                    }
+                }, (error) => {
+                    console.error("Error watching brand data:", error);
+                });
+            } else {
+                setBrandData(null);
+            }
+        });
+
+        // Cleanup both listeners on unmount
+        return () => {
+            if (unsubscribeBrand) unsubscribeBrand();
+            unsubscribeAuth();
         };
-        fetchBrandData();
     }, []);
 
     // Auto-set platform for Tweet type (only if not overridden by URL)
@@ -269,11 +284,15 @@ const Generators = () => {
                         platform: advancedOptions.platform,
                         // Conditionally include brand data or defaults
                         ...(advancedOptions.useBrandData && brandData ? {
-                            niche: brandData.coreTopic,
-                            tone: brandData.tone,
-                            targetAudience: brandData.targetAudience,
-                            contentPillars: brandData.aiGenerated?.contentPillars || [],
-                            brandVoice: brandData.brandVoice
+                            // PRIORITIZE root fields (from Brand Setup page) over nested brandData (from Guide Flow)
+                            niche: brandData.industry || brandData.brandData?.coreTopic,
+                            // Handle Tone: Root is string, Nested might be array
+                            tone: brandData.tone || (Array.isArray(brandData.brandData?.tone) ? brandData.brandData.tone.join(', ') : brandData.brandData?.tone),
+                            targetAudience: brandData.audience || brandData.brandData?.targetAudience,
+
+                            // Guide-specific data (fallback to safe defaults)
+                            contentPillars: brandData.brandData?.aiGenerated?.contentPillars || [],
+                            brandVoice: brandData.brandData?.brandVoice
                         } : {
                             tone: "Professional and engaging",
                             targetAudience: "General audience"
@@ -618,11 +637,22 @@ const Generators = () => {
                                 let parsed = content.text;
                                 if (typeof content.text === 'string') {
                                     try {
-                                        // Attempt to strip markdown code blocks if present (multiple formats)
-                                        let cleanText = content.text
-                                            .replace(/```json\s*/gi, "")  // Remove ```json
-                                            .replace(/```\s*/g, "")        // Remove remaining ```
+                                        // Improved JSON Extraction
+                                        let cleanText = content.text;
+                                        // Attempt to find the JSON object within the text
+                                        const jsonStartIndex = cleanText.indexOf('{');
+                                        const jsonEndIndex = cleanText.lastIndexOf('}');
+
+                                        if (jsonStartIndex !== -1 && jsonEndIndex !== -1) {
+                                            cleanText = cleanText.substring(jsonStartIndex, jsonEndIndex + 1);
+                                        }
+
+                                        // Fallback cleaning for markdown
+                                        cleanText = cleanText
+                                            .replace(/```json\s*/gi, "")
+                                            .replace(/```\s*/g, "")
                                             .trim();
+
                                         parsed = JSON.parse(cleanText);
                                     } catch (e) {
                                         // JSON Parse Failed. Try Heuristic Parsing for "Idea" lists.
