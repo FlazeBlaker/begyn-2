@@ -176,6 +176,18 @@ const MessageBubble = ({ message }) => {
     const [hover, setHover] = useState(false);
     const [copied, setCopied] = useState(false);
 
+    // Try to parse JSON content
+    let parsedContent = null;
+    let isJsonResult = false;
+    try {
+        if (!isUser && typeof message.content === 'string' && message.content.trim().startsWith('{')) {
+            parsedContent = JSON.parse(message.content);
+            isJsonResult = true;
+        }
+    } catch (e) {
+        // Not JSON, render as normal text
+    }
+
     const userGradient = "linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #8b5cf6 100%)";
     const aiGradient = "linear-gradient(180deg, rgba(40,40,55,0.75), rgba(30,30,40,0.7))";
 
@@ -184,9 +196,9 @@ const MessageBubble = ({ message }) => {
         color: "#fff",
         padding: "14px 18px",
         borderRadius: 16,
-        maxWidth: "88%",
+        maxWidth: isJsonResult ? "95%" : "88%",
         alignSelf: isUser ? "flex-end" : "flex-start",
-        whiteSpace: "pre-wrap",
+        whiteSpace: isJsonResult ? "normal" : "pre-wrap",
         lineHeight: 1.6,
         boxShadow: isUser ? "0 10px 30px rgba(124,58,237,0.15)" : "0 6px 18px rgba(0,0,0,0.35)",
         border: isUser ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(255,255,255,0.02)",
@@ -228,6 +240,125 @@ const MessageBubble = ({ message }) => {
         }
     };
 
+    // Render JSON results in card format
+    const renderJsonResults = () => {
+        const results = parsedContent.ideas || parsedContent.captions || parsedContent.tweets || parsedContent.script || [];
+        const type = parsedContent.ideas ? 'Ideas' : parsedContent.captions ? 'Captions' : parsedContent.tweets ? 'Tweets' : 'Script';
+        const [copiedStates, setCopiedStates] = useState({});
+
+        if (parsedContent.script) {
+            return (
+                <div style={{ marginTop: 12 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#a855f7', marginBottom: 8 }}>✨ Generated Script</div>
+                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: 12, borderRadius: 8, whiteSpace: 'pre-wrap' }}>
+                        {parsedContent.script}
+                    </div>
+                </div>
+            );
+        }
+
+        // Render structured ideas with copy buttons
+        if (parsedContent.ideas) {
+            const copyIdea = async (idea, index) => {
+                const text = typeof idea === 'object'
+                    ? `${idea.title}\n\n${idea.description}\n\nEstimated Length: ${idea.length}`
+                    : idea;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    setCopiedStates(prev => ({ ...prev, [index]: true }));
+                    setTimeout(() => {
+                        setCopiedStates(prev => ({ ...prev, [index]: false }));
+                    }, 1500);
+                } catch (err) {
+                    console.error("copy failed", err);
+                }
+            };
+
+            return (
+                <div style={{ marginTop: 12 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#a855f7', marginBottom: 10 }}>✨ Generated {type}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        {results.map((idea, i) => (
+                            <div key={i} style={{
+                                background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(124, 58, 237, 0.08))',
+                                border: '1px solid rgba(168, 85, 247, 0.25)',
+                                padding: '16px',
+                                borderRadius: 12,
+                                position: 'relative'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                                    <div style={{ color: '#a855f7', fontWeight: 700, fontSize: 13 }}>#{i + 1}</div>
+                                    <button
+                                        onClick={() => copyIdea(idea, i)}
+                                        style={{
+                                            background: copiedStates[i] ? '#4ade80' : 'rgba(168, 85, 247, 0.2)',
+                                            border: '1px solid rgba(168, 85, 247, 0.4)',
+                                            color: copiedStates[i] ? '#000' : '#fff',
+                                            padding: '6px 12px',
+                                            borderRadius: 6,
+                                            fontSize: 12,
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        {copiedStates[i] ? '✓ Copied' : '📋 Copy'}
+                                    </button>
+                                </div>
+                                {typeof idea === 'object' ? (
+                                    <>
+                                        <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 8, lineHeight: 1.4 }}>
+                                            {idea.title}
+                                        </div>
+                                        <div style={{ fontSize: 14, color: '#e0e0e0', marginBottom: 10, lineHeight: 1.6 }}>
+                                            {idea.description}
+                                        </div>
+                                        {idea.length && (
+                                            <div style={{
+                                                display: 'inline-block',
+                                                background: 'rgba(168, 85, 247, 0.15)',
+                                                padding: '4px 10px',
+                                                borderRadius: 20,
+                                                fontSize: 12,
+                                                color: '#c084fc'
+                                            }}>
+                                                ⏱ {idea.length}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div style={{ fontSize: 14, lineHeight: 1.5 }}>{idea}</div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Render other types (captions, tweets) as before
+        return (
+            <div style={{ marginTop: 12 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#a855f7', marginBottom: 10 }}>✨ Generated {type}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {(Array.isArray(results) ? results : [results]).map((item, i) => (
+                        <div key={i} style={{
+                            background: 'rgba(168, 85, 247, 0.08)',
+                            border: '1px solid rgba(168, 85, 247, 0.2)',
+                            padding: '12px 14px',
+                            borderRadius: 10,
+                            fontSize: 14,
+                            lineHeight: 1.5
+                        }}>
+                            <span style={{ color: '#a855f7', fontWeight: 600, marginRight: 8 }}>{i + 1}.</span>
+                            {typeof item === 'object' ? item.text || JSON.stringify(item) : item}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div
             style={bubbleStyle}
@@ -236,7 +367,7 @@ const MessageBubble = ({ message }) => {
             aria-live="polite"
         >
             <div style={roleStyle}>{isUser ? "You" : "AI Assistant"}</div>
-            <div>{formatText(message.content)}</div>
+            {isJsonResult ? renderJsonResults() : <div>{formatText(message.content)}</div>}
             {!isUser && (
                 <button style={copyBtn} onClick={handleCopy} aria-label="Copy message">
                     {copied ? "Copied!" : "Copy"}

@@ -545,12 +545,19 @@ Determine your PHASE:
 - 75-90%: GROWTH - Repurposing, trends, cross-platform
 - 90-100%: MONETIZATION - Revenue streams, partnerships
 
-🔍 BEFORE GENERATING:
-1. Check previous steps to see what's already covered
-2. Identify which phase you're in based on step numbers
-3. Generate steps appropriate for THAT PHASE ONLY
-4. Ensure NO step title is similar to previous steps
-5. Each step must be a NEW, UNIQUE activity
+
+🔍 BEFORE GENERATING (MANDATORY):
+1. **Review Context**: Previous steps = ${JSON.stringify(previousSteps || [])}
+2. **Current Phase**: ${Math.round((startStep / (payload?.totalSteps || 60)) * 100)}% complete
+3. **Forbidden Repetitions** - If previous steps already covered these, DO NOT REPEAT:
+   - Any "Download" or "Install" tasks (foundation only)
+   - "Create account" or "Setup anything" (foundation only)
+   - "Record first video" (content creation phase, done once)
+   - "Edit video" or "Import footage" (content creation phase, done once)
+   - "Create thumbnail" (content creation phase, done once)
+4. **Verify uniqueness**: Each new step must be COMPLETELY DIFFERENT
+5. **Progress forward**: Move to next phase activities, don't loop back
+
 
 OUTPUT JSON ONLY:
 { "roadmapSteps": [{ 
@@ -560,7 +567,56 @@ OUTPUT JSON ONLY:
   "reason": "string",
   "completionCondition": "string",
   "recommendedTools": ["string", "string"]
-}] }`
+}] }`,
+                    idea: `Generate ${payload?.numIdeas || 10} viral content ideas for ${topic}.
+Platform: ${platform || 'general social media'}
+
+For each idea, provide:
+- title: Catchy, attention-grabbing title
+- description: 2-3 sentence explanation of the content
+- length: Estimated video/content length (e.g., "60 seconds", "5 minutes", "10 minutes")
+
+Make ideas:
+- Specific and actionable
+- Platform-appropriate
+- Trending-aware
+- Easy to execute
+
+OUTPUT JSON:
+{ "ideas": [
+  {
+    "title": "Idea title here",
+    "description": "Detailed explanation of what this content would be about",
+    "length": "5 minutes"
+  }
+] }`,
+                    caption: `Write ${payload?.numOutputs || 3} engaging captions for: ${topic}
+
+Make them:
+- Hook in first 5 words
+- Value-driven
+- Include call-to-action
+
+OUTPUT JSON:
+{ "captions": ["caption 1", "caption 2", ...] }`,
+                    tweet: `Write ${payload?.numOutputs || 5} viral tweets about: ${topic}
+
+Make them:
+- Attention-grabbing
+- Value-packed
+- Shareable
+
+OUTPUT JSON:
+{ "tweets": ["tweet 1", "tweet 2", ...] }`,
+                    videoScript: `Write a video script for ${platform || 'social media'} about: ${topic}
+
+Include:
+- Hook (first 3 seconds)
+- Main content
+- Call-to-action
+
+OUTPUT JSON:
+{ "script": "full script here" }`
                 };
 
                 // --- TEXT GENERATION ---

@@ -644,8 +644,8 @@ export default function GuideFlow({ setOnboardedStatus }) {
                 const endStep = startStep + batchSize - 1;
                 setLoadingProgress(`Orchestrating steps ${startStep}-${endStep} of ${totalSteps}...`);
 
-                // Context: Pass the last 3 steps to maintain continuity
-                const previousStepsContext = allSteps.slice(-3).map(s => ({ title: s.title, description: s.description }));
+                // Context: Pass the last 8 steps to maintain continuity and prevent repetition
+                const previousStepsContext = allSteps.slice(-8).map(s => ({ title: s.title, description: s.description }));
 
                 try {
                     const batchResponse = await generateContent({
