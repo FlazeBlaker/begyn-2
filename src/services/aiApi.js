@@ -21,8 +21,8 @@ export async function generateContent({ type, payload = {} }) {
 
     // 4. Call your Firebase HTTPS function
     const res = await fetch(
-        "http://127.0.0.1:5001/ai-social-media-19b8b/us-central1/generateContent", // Local Emulator
-        // "https://us-central1-ai-social-media-19b8b.cloudfunctions.net/generateContent", // Production
+        // "http://127.0.0.1:5001/ai-social-media-19b8b/us-central1/generateContent", // Local Emulator
+        "https://us-central1-ai-social-media-19b8b.cloudfunctions.net/generateContent", // Production
         {
             method: "POST",
             headers: {
